@@ -32,6 +32,14 @@ namespace Stochastic_Game_Theory_Calculator
 
         }
 
-     
+        private void MatrixInitialise_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tutorialButton_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.youtube.com/watch?v=rA57mAI6cKc");
+        }
     }
 }
