@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,7 +13,7 @@ namespace Stochastic_Game_Theory_Calculator
 {
     public partial class mainWindow : Form
     {
-        private PointF currentPosition;
+
         public mainWindow()
         {
             InitializeComponent();
@@ -158,6 +159,10 @@ namespace Stochastic_Game_Theory_Calculator
 
         }
 
+        private Vector currentPosition;
+        private List<Entities.Point> points = new List<Entities.Point>();
+        private int DrawIndex = -1;
+        private bool active_drawing = false;
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             currentPosition = PointToCartesian(e.Location);
@@ -176,13 +181,50 @@ namespace Stochastic_Game_Theory_Calculator
             }
 
         }
-        private PointF PointToCartesian(Point point)
+        private Vector PointToCartesian(Point point)
         {
-            return new PointF(Pixel_to_Mm(point.X), Pixel_to_Mm(CoordinatesLabel.Height - point.Y));
+            return new Vector(Pixel_to_Mm(point.X), Pixel_to_Mm(Canvas.Height - point.Y));
         }
         private float Pixel_to_Mm(float pixel)
         {
             return (pixel / DPI) * 25.4f;
+        }
+
+        private void Canvas_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (active_drawing)
+                {
+                    switch (DrawIndex)
+                    {
+                        case 0:
+                            points.Add(new Entities.Point(currentPosition));
+                            break;
+                    }
+                    Canvas.Refresh();
+                }
+            }
+
+        }
+
+        private void Canvas_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SetParameters(Pixel_to_Mm(Canvas.Height));
+            if (points.Count > 0)
+            {
+                foreach (Entities.Point p in points)
+                {
+                    e.Graphics.DrawPoint(new Pen(Color.Red,0),p);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DrawIndex = 0;
+            active_drawing = true;
+            Canvas.Cursor = Cursors.Cross;
         }
     }
 }

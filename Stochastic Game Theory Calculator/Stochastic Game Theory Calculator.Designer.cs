@@ -36,6 +36,7 @@
             this.GaphInitialise = new System.Windows.Forms.Button();
             this.Canvas = new System.Windows.Forms.PictureBox();
             this.CoordinatesLabel = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.ModelSelectionPannel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -79,6 +80,7 @@
             // ModelSelectionPannel
             // 
             this.ModelSelectionPannel.AutoScrollMargin = new System.Drawing.Size(50, 60);
+            this.ModelSelectionPannel.Controls.Add(this.button1);
             this.ModelSelectionPannel.Controls.Add(this.solveButton);
             this.ModelSelectionPannel.Controls.Add(this.pictureBox4);
             this.ModelSelectionPannel.Controls.Add(this.pictureBox3);
@@ -182,6 +184,8 @@
             this.Canvas.TabIndex = 6;
             this.Canvas.TabStop = false;
             this.Canvas.Click += new System.EventHandler(this.Canvas_Click);
+            this.Canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.Canvas_Paint);
+            this.Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseDown);
             this.Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseMove);
             // 
             // CoordinatesLabel
@@ -194,6 +198,16 @@
             this.CoordinatesLabel.Size = new System.Drawing.Size(37, 24);
             this.CoordinatesLabel.TabIndex = 8;
             this.CoordinatesLabel.Text = "0,0";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(230, 58);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(134, 43);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // mainWindow
             // 
@@ -239,6 +253,7 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label CoordinatesLabel;
+        private System.Windows.Forms.Button button1;
     }
 }
 
