@@ -86,8 +86,9 @@ namespace Stochastic_Game_Theory_Calculator
             {
                 currentMatrix.RowStrategies[r] = MatrixBlueprint[1, r + 2].Value.ToString();
             }
-            MatrixBlueprint[0, 2].Value = currentMatrix.Players[0];
-            MatrixBlueprint[2, 0].Value = currentMatrix.Players[1];
+            currentMatrix.Players[0] = MatrixBlueprint[0, 2].Value.ToString();
+            currentMatrix.Players[1] = MatrixBlueprint[2, 0].Value.ToString();
+
         }
 
         public void DisplayMatrix(Matrix matrix)
