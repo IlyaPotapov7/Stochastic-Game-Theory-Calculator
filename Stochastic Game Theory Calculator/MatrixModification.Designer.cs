@@ -33,10 +33,10 @@
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SaveChanges = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.AddRow = new System.Windows.Forms.Button();
+            this.DeleteRow = new System.Windows.Forms.Button();
+            this.AddColumn = new System.Windows.Forms.Button();
+            this.DeleteColumn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MatrixBlueprint)).BeginInit();
             this.SuspendLayout();
             // 
@@ -83,55 +83,59 @@
             this.SaveChanges.UseVisualStyleBackColor = true;
             this.SaveChanges.Click += new System.EventHandler(this.SaveChanges_Click);
             // 
-            // button1
+            // AddRow
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(12, 572);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(115, 35);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Add Row";
-            this.button1.UseVisualStyleBackColor = true;
+            this.AddRow.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.AddRow.Location = new System.Drawing.Point(12, 572);
+            this.AddRow.Name = "AddRow";
+            this.AddRow.Size = new System.Drawing.Size(115, 35);
+            this.AddRow.TabIndex = 2;
+            this.AddRow.Text = "Add Row";
+            this.AddRow.UseVisualStyleBackColor = true;
+            this.AddRow.Click += new System.EventHandler(this.AddRow_Click);
             // 
-            // button2
+            // DeleteRow
             // 
-            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(133, 572);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(136, 35);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Delete Row";
-            this.button2.UseVisualStyleBackColor = true;
+            this.DeleteRow.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.DeleteRow.Location = new System.Drawing.Point(133, 572);
+            this.DeleteRow.Name = "DeleteRow";
+            this.DeleteRow.Size = new System.Drawing.Size(136, 35);
+            this.DeleteRow.TabIndex = 3;
+            this.DeleteRow.Text = "Delete Row";
+            this.DeleteRow.UseVisualStyleBackColor = true;
+            this.DeleteRow.Click += new System.EventHandler(this.DeleteRow_Click);
             // 
-            // button3
+            // AddColumn
             // 
-            this.button3.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button3.Location = new System.Drawing.Point(310, 572);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(147, 35);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Add Column";
-            this.button3.UseVisualStyleBackColor = true;
+            this.AddColumn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.AddColumn.Location = new System.Drawing.Point(310, 572);
+            this.AddColumn.Name = "AddColumn";
+            this.AddColumn.Size = new System.Drawing.Size(147, 35);
+            this.AddColumn.TabIndex = 4;
+            this.AddColumn.Text = "Add Column";
+            this.AddColumn.UseVisualStyleBackColor = true;
+            this.AddColumn.Click += new System.EventHandler(this.AddColumn_Click);
             // 
-            // button4
+            // DeleteColumn
             // 
-            this.button4.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button4.Location = new System.Drawing.Point(463, 572);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(185, 35);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Delete Column";
-            this.button4.UseVisualStyleBackColor = true;
+            this.DeleteColumn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.DeleteColumn.Location = new System.Drawing.Point(463, 572);
+            this.DeleteColumn.Name = "DeleteColumn";
+            this.DeleteColumn.Size = new System.Drawing.Size(185, 35);
+            this.DeleteColumn.TabIndex = 5;
+            this.DeleteColumn.Text = "Delete Column";
+            this.DeleteColumn.UseVisualStyleBackColor = true;
+            this.DeleteColumn.Click += new System.EventHandler(this.DeleteColumn_Click);
             // 
             // MatrixModification
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 619);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.DeleteColumn);
+            this.Controls.Add(this.AddColumn);
+            this.Controls.Add(this.DeleteRow);
+            this.Controls.Add(this.AddRow);
             this.Controls.Add(this.SaveChanges);
             this.Controls.Add(this.MatrixBlueprint);
             this.Font = new System.Drawing.Font("Times New Roman", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -150,9 +154,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.Button SaveChanges;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button AddRow;
+        private System.Windows.Forms.Button DeleteRow;
+        private System.Windows.Forms.Button AddColumn;
+        private System.Windows.Forms.Button DeleteColumn;
     }
 }
