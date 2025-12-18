@@ -50,7 +50,7 @@ namespace Stochastic_Game_Theory_Calculator
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            savedMaticies = new Models.Matrix[100];
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -65,18 +65,14 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void MatrixInitialise_Click(object sender, EventArgs e)
         {
-            savedMaticies = new Models.Matrix[10];
             currentMatrix = new Models.Matrix();
             currentMatrix = currentMatrix.defaultMatrix();
+            currentMatrix.setMatrixID(matrixID);
             MatrixModification MM = new MatrixModification();
             MM.recieveMatrix(currentMatrix);
             MM.ShowDialog();
-            saveMatrix(currentMatrix, matrixID);
-
-        }
-        public void saveMatrix(Models.Matrix matrix, int matrixID)
-        {
-            savedMaticies[matrixID] = matrix;
+            savedMaticies[currentMatrix.MatrixID] = MM.currentMatrix;
+            matrixID++;
         }
 
 
@@ -130,5 +126,6 @@ namespace Stochastic_Game_Theory_Calculator
             SM.ShowDialog();
             currentSimulations = SM.itterations;
         }
+
     }
 }
