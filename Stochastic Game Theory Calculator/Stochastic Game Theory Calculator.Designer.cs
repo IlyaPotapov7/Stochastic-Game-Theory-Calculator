@@ -36,7 +36,6 @@
             this.GaphInitialise = new System.Windows.Forms.Button();
             this.Canvas = new System.Windows.Forms.PictureBox();
             this.CoordinatesLabel = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
             this.ModelSelectionPannel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
@@ -59,9 +58,9 @@
             // MatrixInitialise
             // 
             this.MatrixInitialise.AutoSize = true;
-            this.MatrixInitialise.Location = new System.Drawing.Point(16, 194);
+            this.MatrixInitialise.Location = new System.Drawing.Point(16, 197);
             this.MatrixInitialise.Name = "MatrixInitialise";
-            this.MatrixInitialise.Size = new System.Drawing.Size(172, 66);
+            this.MatrixInitialise.Size = new System.Drawing.Size(172, 49);
             this.MatrixInitialise.TabIndex = 3;
             this.MatrixInitialise.Text = "Normal";
             this.MatrixInitialise.UseVisualStyleBackColor = true;
@@ -80,7 +79,6 @@
             // ModelSelectionPannel
             // 
             this.ModelSelectionPannel.AutoScrollMargin = new System.Drawing.Size(50, 60);
-            this.ModelSelectionPannel.Controls.Add(this.button1);
             this.ModelSelectionPannel.Controls.Add(this.solveButton);
             this.ModelSelectionPannel.Controls.Add(this.pictureBox4);
             this.ModelSelectionPannel.Controls.Add(this.pictureBox3);
@@ -110,7 +108,7 @@
             // pictureBox4
             // 
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(233, 648);
+            this.pictureBox4.Location = new System.Drawing.Point(233, 501);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(131, 123);
             this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -120,7 +118,7 @@
             // pictureBox3
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(233, 491);
+            this.pictureBox3.Location = new System.Drawing.Point(233, 657);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(137, 106);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -149,7 +147,7 @@
             // 
             // ConnectionInitialise
             // 
-            this.ConnectionInitialise.Location = new System.Drawing.Point(14, 690);
+            this.ConnectionInitialise.Location = new System.Drawing.Point(16, 535);
             this.ConnectionInitialise.Name = "ConnectionInitialise";
             this.ConnectionInitialise.Size = new System.Drawing.Size(180, 48);
             this.ConnectionInitialise.TabIndex = 7;
@@ -158,16 +156,17 @@
             // 
             // SimulationInitialise
             // 
-            this.SimulationInitialise.Location = new System.Drawing.Point(16, 524);
+            this.SimulationInitialise.Location = new System.Drawing.Point(16, 683);
             this.SimulationInitialise.Name = "SimulationInitialise";
             this.SimulationInitialise.Size = new System.Drawing.Size(172, 49);
             this.SimulationInitialise.TabIndex = 6;
             this.SimulationInitialise.Text = "Stochastic";
             this.SimulationInitialise.UseVisualStyleBackColor = true;
+            this.SimulationInitialise.Click += new System.EventHandler(this.SimulationInitialise_Click);
             // 
             // GaphInitialise
             // 
-            this.GaphInitialise.Location = new System.Drawing.Point(16, 361);
+            this.GaphInitialise.Location = new System.Drawing.Point(16, 354);
             this.GaphInitialise.Name = "GaphInitialise";
             this.GaphInitialise.Size = new System.Drawing.Size(165, 50);
             this.GaphInitialise.TabIndex = 5;
@@ -198,16 +197,6 @@
             this.CoordinatesLabel.Size = new System.Drawing.Size(37, 24);
             this.CoordinatesLabel.TabIndex = 8;
             this.CoordinatesLabel.Text = "0,0";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(230, 58);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(134, 43);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // mainWindow
             // 
@@ -253,7 +242,6 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label CoordinatesLabel;
-        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -3,23 +3,33 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Stochastic_Game_Theory_Calculator.Entities;
+using Stochastic_Game_Theory_Calculator.Models;
+using Stochastic_Game_Theory_Calculator.GraphicsExtension;
 
 namespace Stochastic_Game_Theory_Calculator
 {
+
+
     public partial class mainWindow : Form
     {
-
+        private Models.Matrix currentMatrix;
+        private Graph currentGraph;
+        private int currentSimulations;
+        public Models.Matrix[] savedMaticies;
+        public int matrixID = 0;
+        private int graphID = 0;
+        private Graph[] savedGraphs;
         public mainWindow()
         {
             InitializeComponent();
         }
-
-        private Matrix currentMatrix;
 
         class CanvasManager
         {
@@ -34,33 +44,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         }
 
-        class Matrix
-        {
-            public int rows { get; set; }
-            public int cols { get; set; }
-            public float[,] payoffs { get; set; }
-            public string[] RowStrategies { get; set; }
-            public string[] ColStrategies { get; set; }
-
-            public float X { get; set; } = 50;
-            public float Y { get; set; } = 50;
-
-            public void initialiseMatrix(int r, int c, string[] rowstrategies, string[] colstrategies)
-            {
-                rows = r;
-                cols = c;
-                RowStrategies = rowstrategies;
-                ColStrategies = colstrategies;
-            }
-
-            public void setPayoffs(Matrix matrix, float[,] payoffs)
-            {
-                matrix.payoffs = payoffs;
-            }
-
-
-        }
-
+        
         class Graph
         {
             public class Node
@@ -125,7 +109,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         class Algorithms
         {
-
+            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -144,10 +128,19 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void MatrixInitialise_Click(object sender, EventArgs e)
         {
-            currentMatrix = new Matrix();
-
+            currentMatrix = new Models.Matrix();
+            currentMatrix = currentMatrix.defaultMatrix();
+            MatrixModification MM = new MatrixModification();
+            //MM.MatrixBlueprint = 
+            MM.ShowDialog();
+            saveMatrix(currentMatrix, matrixID);
 
         }
+        public void saveMatrix(Models.Matrix matrix, int matrixID)
+        {
+            savedMaticies[matrixID] = matrix;
+        }
+
 
         private void tutorialButton_Click(object sender, EventArgs e)
         {
@@ -165,7 +158,7 @@ namespace Stochastic_Game_Theory_Calculator
         private bool active_drawing = false;
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            currentPosition = PointToCartesian(e.Location);
+            //currentPosition = PointToCartesian(e.Location));
             CoordinatesLabel.Text = $"{currentPosition.X:F2}, {currentPosition.Y:F2}";
         }
 
@@ -181,10 +174,10 @@ namespace Stochastic_Game_Theory_Calculator
             }
 
         }
-        private Vector PointToCartesian(Point point)
-        {
-            return new Vector(Pixel_to_Mm(point.X), Pixel_to_Mm(Canvas.Height - point.Y));
-        }
+        //private Vector PointToCartesian(Entities.Point point)
+       // {
+          //  return new Vector(Pixel_to_Mm(point.X), Pixel_to_Mm(Canvas.Height - point.Y));
+        //}
         private float Pixel_to_Mm(float pixel)
         {
             return (pixel / DPI) * 25.4f;
@@ -220,11 +213,11 @@ namespace Stochastic_Game_Theory_Calculator
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void SimulationInitialise_Click(object sender, EventArgs e)
         {
-            DrawIndex = 0;
-            active_drawing = true;
-            Canvas.Cursor = Cursors.Cross;
+            StochasticModification SM = new StochasticModification();
+            SM.ShowDialog();
+            currentSimulations = SM.itterations;
         }
     }
 }
