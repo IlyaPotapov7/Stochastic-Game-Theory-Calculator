@@ -42,11 +42,14 @@
             // 
             // MatrixBlueprint
             // 
+            this.MatrixBlueprint.AllowUserToAddRows = false;
+            this.MatrixBlueprint.AllowUserToDeleteRows = false;
             this.MatrixBlueprint.AllowUserToOrderColumns = true;
             this.MatrixBlueprint.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.MatrixBlueprint.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.MatrixBlueprint.BackgroundColor = System.Drawing.SystemColors.ActiveCaption;
             this.MatrixBlueprint.ColumnHeadersHeight = 46;
+            this.MatrixBlueprint.ColumnHeadersVisible = false;
             this.MatrixBlueprint.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
             this.Column2});
@@ -54,7 +57,7 @@
             this.MatrixBlueprint.GridColor = System.Drawing.SystemColors.ActiveCaption;
             this.MatrixBlueprint.Location = new System.Drawing.Point(0, 0);
             this.MatrixBlueprint.Name = "MatrixBlueprint";
-            this.MatrixBlueprint.RowHeadersWidth = 82;
+            this.MatrixBlueprint.RowHeadersWidth = 85;
             this.MatrixBlueprint.RowTemplate.Height = 33;
             this.MatrixBlueprint.Size = new System.Drawing.Size(964, 619);
             this.MatrixBlueprint.TabIndex = 0;
