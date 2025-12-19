@@ -37,6 +37,7 @@
             this.DeleteRow = new System.Windows.Forms.Button();
             this.AddColumn = new System.Windows.Forms.Button();
             this.DeleteColumn = new System.Windows.Forms.Button();
+            this.CancelChanges = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MatrixBlueprint)).BeginInit();
             this.SuspendLayout();
             // 
@@ -130,11 +131,24 @@
             this.DeleteColumn.UseVisualStyleBackColor = true;
             this.DeleteColumn.Click += new System.EventHandler(this.DeleteColumn_Click);
             // 
+            // CancelChanges
+            // 
+            this.CancelChanges.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.CancelChanges.Font = new System.Drawing.Font("Times New Roman", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CancelChanges.Location = new System.Drawing.Point(677, 559);
+            this.CancelChanges.Name = "CancelChanges";
+            this.CancelChanges.Size = new System.Drawing.Size(134, 54);
+            this.CancelChanges.TabIndex = 7;
+            this.CancelChanges.Text = "Return Saved Payoffs";
+            this.CancelChanges.UseVisualStyleBackColor = true;
+            this.CancelChanges.Click += new System.EventHandler(this.CancelChanges_Click);
+            // 
             // MatrixModification
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 27F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(964, 619);
+            this.Controls.Add(this.CancelChanges);
             this.Controls.Add(this.DeleteColumn);
             this.Controls.Add(this.AddColumn);
             this.Controls.Add(this.DeleteRow);
@@ -161,5 +175,6 @@
         private System.Windows.Forms.Button DeleteRow;
         private System.Windows.Forms.Button AddColumn;
         private System.Windows.Forms.Button DeleteColumn;
+        private System.Windows.Forms.Button CancelChanges;
     }
 }

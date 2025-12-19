@@ -66,13 +66,13 @@ namespace Stochastic_Game_Theory_Calculator
 
                     if (cellValue == null || string.IsNullOrWhiteSpace(cellValue.ToString()))
                     {
-                        MessageBox.Show($"Cell {r+3},{x+3} is empty. Please fill in the payoff");
+                        MessageBox.Show($"Cell {x+3},{r+3} is empty. Please fill in the payoff");
                         return false;
                     }
                     splitPayoff = cellValue.ToString().Split(',');
                     if (splitPayoff.Length != 2 || !float.TryParse(splitPayoff[0], out _) || !float.TryParse(splitPayoff[1], out _))
                     {
-                        MessageBox.Show($"The value {(MatrixBlueprint[r+2,x+2]).Value} is invalid, the payoff must be in the form 'number,number'");
+                        MessageBox.Show($"The value '{(MatrixBlueprint[x+2,r+2]).Value}' is invalid, the payoff must be in the form 'number,number'");
                         return false;
                     }
                 }
@@ -151,7 +151,6 @@ namespace Stochastic_Game_Theory_Calculator
                 }
                 currentMatrix.Players[0] = MatrixBlueprint[0, 2].Value.ToString();
                 currentMatrix.Players[1] = MatrixBlueprint[2, 0].Value.ToString();
-                VerifyPayofsFloat();
             return true;
         }
 
@@ -310,6 +309,11 @@ namespace Stochastic_Game_Theory_Calculator
             }
             currentMatrix.ColStrategies = temporaryColStrategies;
             currentMatrix.payoffs = temporaryPayoffs;
+            DisplayMatrix(currentMatrix);
+        }
+
+        private void CancelChanges_Click(object sender, EventArgs e)
+        {
             DisplayMatrix(currentMatrix);
         }
     }   
