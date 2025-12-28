@@ -37,13 +37,13 @@
             // ModelSelection
             // 
             this.ModelSelection.AutoSize = true;
-            this.ModelSelection.Font = new System.Drawing.Font("Times New Roman", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ModelSelection.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ModelSelection.Location = new System.Drawing.Point(17, 31);
             this.ModelSelection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ModelSelection.Name = "ModelSelection";
-            this.ModelSelection.Size = new System.Drawing.Size(204, 32);
+            this.ModelSelection.Size = new System.Drawing.Size(165, 25);
             this.ModelSelection.TabIndex = 2;
-            this.ModelSelection.Text = "Model Selection";
+            this.ModelSelection.Text = "Model Asembly";
             // 
             // MatrixInitialise
             // 
@@ -97,6 +97,7 @@
             this.solveButton.TabIndex = 12;
             this.solveButton.Text = "Solve";
             this.solveButton.UseVisualStyleBackColor = false;
+            this.solveButton.Click += new System.EventHandler(this.solveButton_Click);
             // 
             // ConnectionInitialise
             // 

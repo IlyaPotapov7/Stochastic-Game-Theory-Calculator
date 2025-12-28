@@ -31,7 +31,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         private float zoomDelta = 0.6f;
         private PointF zoomFocus = new PointF(0, 0);
-        
+
         private int movingMatrixID = -1;
         private PointF selectPoint = new PointF(0, 0);
         private PointF startingPosition = new PointF(0, 0);
@@ -39,6 +39,9 @@ namespace Stochastic_Game_Theory_Calculator
 
         private bool panning = false;
         private PointF previousPoint;
+
+        public bool matrixSelection = false;
+
         public mainWindow()
         {
             InitializeComponent();
@@ -53,13 +56,16 @@ namespace Stochastic_Game_Theory_Calculator
         // This subroutine will handle the initialisation of a new matrix
         private void MatrixInitialise_Click(object sender, EventArgs e)
         {
-            currentMatrix = new Models.Matrix();
-            currentMatrix = currentMatrix.defaultMatrix();
-            currentMatrix.X = 100;
-            currentMatrix.Y = 70;
-            currentMatrix.setMatrixID(matrixID);
-            editMatrix();
-            matrixID++;
+            if (!stopSelection())
+            {
+                currentMatrix = new Models.Matrix();
+                currentMatrix = currentMatrix.defaultMatrix();
+                currentMatrix.X = 100;
+                currentMatrix.Y = 70;
+                currentMatrix.setMatrixID(matrixID);
+                editMatrix();
+                matrixID++;
+            }
         }
 
         public void editMatrix()
@@ -74,6 +80,7 @@ namespace Stochastic_Game_Theory_Calculator
             }
             else if (MM.isSaved)
             {
+                currentMatrix = MM.currentMatrix;
                 bool positionVerified = false;
 
                 using (Graphics g = this.CreateGraphics())
@@ -117,7 +124,10 @@ namespace Stochastic_Game_Theory_Calculator
         }
         private void tutorialButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.youtube.com/watch?v=rA57mAI6cKc");
+            if (!stopSelection())
+            {
+                System.Diagnostics.Process.Start("https://www.youtube.com/watch?v=rA57mAI6cKc");
+            }
         }
 
         private void Canvas_Click(object sender, EventArgs e)
@@ -137,7 +147,7 @@ namespace Stochastic_Game_Theory_Calculator
 
                 Canvas.Invalidate();
             }
-            else if(panning)
+            else if (panning)
             {
                 zoomFocus.X += e.X - previousPoint.X;
                 zoomFocus.Y += e.Y - previousPoint.Y;
@@ -156,41 +166,41 @@ namespace Stochastic_Game_Theory_Calculator
                 {
                     savedMaticies[movingMatrixID].hitbox = MatrixBounds(savedMaticies[movingMatrixID], g);
 
-                        for (int i = 0; i < matrixID; i++)
-                        {
-                            //avoid checking coordinates of the dragged matrix with it's old position
-                            if (i == movingMatrixID)
-                            {
-                                continue;
-                            }
-
-                            if (savedMaticies[i] != null)
-                            {
-                                //get the dymentions of the matrix that is being compared with
-
-                                savedMaticies[i].hitbox = MatrixBounds(savedMaticies[i], g);
-
-                                if (savedMaticies[i].hitbox.IntersectsWith(savedMaticies[movingMatrixID].hitbox))
-                                {
-                                    collision = true;
-                                    break;
-                                }
-                            }
-
-                        }
-                }
-                    //if the collision happens, the moving matrix returns back to where it was before the movement
-
-                    if (collision)
+                    for (int i = 0; i < matrixID; i++)
                     {
-                        savedMaticies[movingMatrixID].X = startingPosition.X;
-                        savedMaticies[movingMatrixID].Y = startingPosition.Y;
-                        MessageBox.Show("Matrices cannot overlap");
-                    }
+                        //avoid checking coordinates of the dragged matrix with it's old position
+                        if (i == movingMatrixID)
+                        {
+                            continue;
+                        }
 
-                    isDragged = false;
-                    movingMatrixID = -1;
-                
+                        if (savedMaticies[i] != null)
+                        {
+                            //get the dymentions of the matrix that is being compared with
+
+                            savedMaticies[i].hitbox = MatrixBounds(savedMaticies[i], g);
+
+                            if (savedMaticies[i].hitbox.IntersectsWith(savedMaticies[movingMatrixID].hitbox))
+                            {
+                                collision = true;
+                                break;
+                            }
+                        }
+
+                    }
+                }
+                //if the collision happens, the moving matrix returns back to where it was before the movement
+
+                if (collision)
+                {
+                    savedMaticies[movingMatrixID].X = startingPosition.X;
+                    savedMaticies[movingMatrixID].Y = startingPosition.Y;
+                    MessageBox.Show("Matrices cannot overlap");
+                }
+
+                isDragged = false;
+                movingMatrixID = -1;
+
                 Canvas.Invalidate();
             }
             panning = false;
@@ -201,42 +211,55 @@ namespace Stochastic_Game_Theory_Calculator
 
             using (Graphics g = this.CreateGraphics())
             {
-              
-                    for (int i = 0; i < matrixID; i++)
+
+                for (int i = 0; i < matrixID; i++)
+                {
+                    Models.Matrix matrix = savedMaticies[i];
+                    if (matrix != null)
                     {
-                        Models.Matrix matrix = savedMaticies[i];
-                        if (matrix != null)
+                        matrix.hitbox = MatrixBounds(matrix, g);
+
+                        //if matrix is clicked on with the right nouse button it is set as a current matrix.
+                        //if its being selected for solving, it will skip editing and will finish selection
+                        if (e.Button == MouseButtons.Right && matrix.hitbox.Contains(worldMouseLocation))
                         {
-                            matrix.hitbox = MatrixBounds(matrix, g);
-
-                            if (e.Button == MouseButtons.Right && matrix.hitbox.Contains(worldMouseLocation))
+                            currentMatrix = matrix;
+                            if (!matrixSelection)
                             {
-                                currentMatrix = matrix;
                                 editMatrix();
-                                break;
                             }
-                            else if (matrix.hitbox.Contains(worldMouseLocation))
+                            else
                             {
-                                movingMatrixID = i;
-                                isDragged = true;
-
-                                selectPoint = new PointF(worldMouseLocation.X - matrix.X, worldMouseLocation.Y - matrix.Y);
-
-                                startingPosition = new PointF(matrix.X, matrix.Y);
-
-                                break;
+                                matrixSelection = false;
+                                BestResponceEnumeration(currentMatrix);
                             }
+                            break;
+
+                        }
+                        else if (matrix.hitbox.Contains(worldMouseLocation))
+                        {
+                            movingMatrixID = i;
+                            isDragged = true;
+
+                            selectPoint = new PointF(worldMouseLocation.X - matrix.X, worldMouseLocation.Y - matrix.Y);
+
+                            startingPosition = new PointF(matrix.X, matrix.Y);
+
+                            break;
                         }
                     }
-                
-                if (movingMatrixID == -1 && e.Button == MouseButtons.Left)
-                {
-                    panning = true;
-                    previousPoint = e.Location;
                 }
-
             }
+
+            if (movingMatrixID == -1 && e.Button == MouseButtons.Left)
+            {
+                panning = true;
+                previousPoint = e.Location;
+            }
+
         }
+    
+
         private void Canvas_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.TranslateTransform(zoomFocus.X, zoomFocus.Y);
@@ -285,7 +308,8 @@ namespace Stochastic_Game_Theory_Calculator
             float cellHight = 60;
             float cellWidth = 100;
 
-            cellWidth = Math.Max(cellHight, LongestCol(matrix,g) + CellBuffer);
+            float contentWidth = LongestCol(matrix, g);
+            cellWidth = Math.Max(cellHight, contentWidth + (CellBuffer * 2));
 
             float gridW = matrix.cols * cellWidth;
             float gridH = matrix.rows * cellHight;
@@ -379,9 +403,76 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void SimulationInitialise_Click(object sender, EventArgs e)
         {
+            stopSelection();
             StochasticModification SM = new StochasticModification();
             SM.ShowDialog();
             currentSimulations = SM.itterations;
         }
+
+        private bool stopSelection()
+        {
+            if (matrixSelection)
+            {
+                DialogResult responce = MessageBox.Show("You have to finish matrix selection before proceeding. Would you like to cancel selection?", "Selection in Progress", MessageBoxButtons.YesNo);
+                if (responce == DialogResult.Yes)
+                {
+                    matrixSelection = false;
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void select_Matrix()
+        {
+            //first i have to identify what matrix to solve, if there are more than 1, user will have to select which one
+            currentMatrix = null;
+            int matrixCount = 0;
+
+            for (int i = 0; i < matrixID; i++)
+            {
+                if (savedMaticies[i] != null)
+                {
+                    matrixCount++;
+                }
+            }
+
+            if(matrixCount == 0)
+            {
+                MessageBox.Show("There are currently no existing matrix");
+            }
+            else if(matrixCount > 1)
+            {
+                MessageBox.Show("Please select a matrix to solve"); 
+                matrixSelection = true;
+            }
+            else
+            {
+                for (int i = 0; i < matrixID; i++)
+                {
+                    if (savedMaticies[i] != null)
+                    {
+                        currentMatrix = savedMaticies[i];
+                    }
+                }
+
+                BestResponceEnumeration(currentMatrix);
+            }
+        }
+        private void solveButton_Click(object sender, EventArgs e)
+        {
+            select_Matrix();
+            //now, the current matrix is the matrix that the user wants to solve, so we can implement the algorithm
+
+        }
+
+        public void BestResponceEnumeration(Models.Matrix matrix)
+        {
+            MessageBox.Show("The selected matrix will now be solved via the Best Responce Enumeration Algorithm");
+        }
+
     }
 }
