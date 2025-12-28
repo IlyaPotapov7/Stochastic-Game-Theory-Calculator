@@ -30,10 +30,10 @@ namespace Stochastic_Game_Theory_Calculator.Models
             rows = 2;
             cols = 2;
             payoffs = new string[rows, cols];
-            payoffs[0, 0] = "3,3";
-            payoffs[0, 1] = "0,4";
-            payoffs[1, 0] = "4,0";
-            payoffs[1, 1] = "2,2";
+            payoffs[0, 0] = "2,2";
+            payoffs[0, 1] = "4,0";
+            payoffs[1, 0] = "0,4";
+            payoffs[1, 1] = "3,3";
             RowStrategies = new string[] { "Cooperate", "Defect" };
             ColStrategies = new string[] { "Cooperate", "Defect" };
             Players = new string[] { "Player 1", "Player 2" };

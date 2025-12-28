@@ -25,7 +25,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         public void recieveMatrix(Models.Matrix matrix)
         {
-            currentMatrix = matrix;
+            currentMatrix = copyMatrix(matrix);
             lastSavedMatrix = copyMatrix(matrix);
         }
 
@@ -114,12 +114,12 @@ namespace Stochastic_Game_Theory_Calculator
         private void SaveBeforeEdit()
         {
             for (int r = 0; r < currentMatrix.rows; r++)
-                {
+            {
                     for (int c = 0; c < currentMatrix.cols; c++)
                     {
                         currentMatrix.payoffs[r, c] = MatrixBlueprint[c + 2, r + 2].Value.ToString();
                     }
-                }
+            }
                 for (int c = 0; c < currentMatrix.cols; c++)
                 {
                     currentMatrix.ColStrategies[c] = MatrixBlueprint[c + 2, 1].Value.ToString();
@@ -197,11 +197,11 @@ namespace Stochastic_Game_Theory_Calculator
                 }
             }
 
-            temporaryRowStrategies[currentMatrix.rows-1] = "Strategy";
+            temporaryRowStrategies[currentMatrix.rows-1] = "New Strategy";
 
             for (int c = 0; c < currentMatrix.cols; c++)
             {
-                temporaryPayoffs[currentMatrix.rows-1, c] = "null";
+                temporaryPayoffs[currentMatrix.rows-1, c] = "empty payoff";
             }
 
             currentMatrix.RowStrategies = temporaryRowStrategies;
@@ -253,10 +253,10 @@ namespace Stochastic_Game_Theory_Calculator
                     temporaryPayoffs[r, c] = currentMatrix.payoffs[r, c];
                 }
             }
-            temporaryColStrategies[currentMatrix.cols - 1] = "Strategy";
+            temporaryColStrategies[currentMatrix.cols - 1] = "New Strategy";
             for (int r = 0; r < currentMatrix.rows; r++)
             {
-                temporaryPayoffs[r, currentMatrix.cols - 1] = "null";
+                temporaryPayoffs[r, currentMatrix.cols - 1] = "empty payoff";
             }
             currentMatrix.ColStrategies = temporaryColStrategies;
             currentMatrix.payoffs = temporaryPayoffs;
@@ -298,14 +298,18 @@ namespace Stochastic_Game_Theory_Calculator
             updatedMatrix.cols = originalMatrix.cols;
             updatedMatrix.rows = originalMatrix.rows;
 
+            updatedMatrix.X = originalMatrix.X;
+            updatedMatrix.Y = originalMatrix.Y;
+
             updatedMatrix.MatrixID = originalMatrix.MatrixID;
 
-            updatedMatrix.payoffs = originalMatrix.payoffs;
+            updatedMatrix.payoffs = (string[,])originalMatrix.payoffs.Clone();
 
-            updatedMatrix.Players = originalMatrix.Players;
-            updatedMatrix.RowStrategies = originalMatrix.RowStrategies;
-            updatedMatrix.ColStrategies = originalMatrix.ColStrategies;
-            updatedMatrix.payoffs = originalMatrix.payoffs;
+            updatedMatrix.Players = (string[])originalMatrix.Players.Clone();
+
+            updatedMatrix.RowStrategies = (string[])originalMatrix.RowStrategies.Clone();
+
+            updatedMatrix.ColStrategies = (string[])originalMatrix.ColStrategies.Clone();
 
             return updatedMatrix;
         }
