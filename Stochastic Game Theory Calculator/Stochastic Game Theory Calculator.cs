@@ -25,7 +25,8 @@ namespace Stochastic_Game_Theory_Calculator
 
         public Font text_font = new Font("Times New Roman", 11, FontStyle.Regular);
         public Font payoff_font = new Font("Times New Roman", 12, FontStyle.Regular);
-        public Font name_font = new Font("Times New Roman", 12, FontStyle.Bold);
+        public Font player_font = new Font("Times New Roman", 12, FontStyle.Bold);
+        public Font name_font = new Font("Times New Roman", 14, FontStyle.Italic);
 
         int CellBuffer = 5;
 
@@ -50,7 +51,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            savedMaticies = new Models.Matrix[100];
+            savedMaticies = new Models.Matrix[999999];
         }
 
         // This subroutine will handle the initialisation of a new matrix
@@ -231,7 +232,7 @@ namespace Stochastic_Game_Theory_Calculator
                             else
                             {
                                 matrixSelection = false;
-                                BestResponceEnumeration(currentMatrix);
+                                BestResponceEnumeration();
                             }
                             break;
 
@@ -321,8 +322,9 @@ namespace Stochastic_Game_Theory_Calculator
             using (Pen gridPen = new Pen(Color.Black, 1))
             using (StringFormat format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
             {
-                g.DrawString(matrix.Players[0], name_font, Brushes.Black, new PointF(matrix.X - 47, matrix.Y + cellHight + (gridH / 2)), format);
-                g.DrawString(matrix.Players[1], name_font, Brushes.Black, new PointF(matrix.X + cellWidth + (gridW / 2), matrix.Y - 10), format);
+                g.DrawString(matrix.Players[0], player_font, Brushes.Black, new PointF(matrix.X - 47, matrix.Y + cellHight + (gridH / 2)), format);
+                g.DrawString(matrix.Players[1], player_font, Brushes.Black, new PointF(matrix.X + cellWidth + (gridW / 2), matrix.Y - 10), format);
+                g.DrawString(matrix.Name, name_font, Brushes.Black, new PointF(matrix.X,matrix.Y), format);
 
                 for (int r = 0; r < matrix.rows; r++)
                 {
@@ -459,19 +461,120 @@ namespace Stochastic_Game_Theory_Calculator
                     }
                 }
 
-                BestResponceEnumeration(currentMatrix);
+                BestResponceEnumeration();
             }
         }
         private void solveButton_Click(object sender, EventArgs e)
         {
             select_Matrix();
             //now, the current matrix is the matrix that the user wants to solve, so we can implement the algorithm
-
         }
 
-        public void BestResponceEnumeration(Models.Matrix matrix)
+        public void BestResponceEnumeration()
         {
             MessageBox.Show("The selected matrix will now be solved via the Best Responce Enumeration Algorithm");
+
+            //prepare data for comparison, from easy to display form into easy to analyse form
+
+            bool[,] Player1BestResponses = new bool[currentMatrix.rows, currentMatrix.cols];
+            bool[,] Player2BestResponses = new bool[currentMatrix.rows, currentMatrix.cols];
+
+            float[,] Player1Payoffs = new float[currentMatrix.rows, currentMatrix.cols];
+            float[,] Player2Payoffs = new float[currentMatrix.rows, currentMatrix.cols];
+
+            //Player 1 analysis
+            //Convert payoffs stored as string into float in order to run math with them
+            for (int row = 0; row < currentMatrix.rows; row++)
+                {
+                    for (int column = 0; column < currentMatrix.cols; column++)
+                    {
+                        string rawText = currentMatrix.payoffs[row, column];
+                        string[] parts = rawText.Split(':');
+
+                    Player1Payoffs[row, column] = float.Parse(parts[0]);
+                    Player2Payoffs[row, column] = float.Parse(parts[1]);
+                    }
+                }
+
+
+                //fix the column for player 2
+                for (int col = 0; col < currentMatrix.cols; col++)
+                {
+                    //finds the payoff for player 1 for a column
+                    float maxPlayer1 = -999999999999999999;
+                    for (int row = 0; row < currentMatrix.rows; row++)
+                    {
+                        if (Player1Payoffs[ row, col] > maxPlayer1)
+                        {
+                            maxPlayer1 = Player1Payoffs[row, col];
+                        }
+                    }
+
+                    //Highlight each cell with the max payoff for a given cell
+                    for (int row = 0; row < currentMatrix.rows; row++)
+                    {
+                        if (Player1Payoffs[row, col] == maxPlayer1)
+                        {
+                            Player1BestResponses[row, col] = true;
+                        }
+                    }
+                }
+
+                ///Player 2 analysis
+                //fix a row
+                for (int row = 0; row < currentMatrix.rows; row++)
+                {
+                    //compare possible payoffs
+                    float maxPlayer2 = -999999999999999999;
+                    for (int columns = 0; columns < currentMatrix.cols; columns++)
+                    {
+                        if (Player2Payoffs[row, columns] > maxPlayer2)
+                        {
+                        maxPlayer2 = Player2Payoffs[row, columns];
+                        }
+                    }
+
+                    //highlight every payoff-maximising cell per given row for player 2
+                    for (int c = 0; c < currentMatrix.cols; c++)
+                    {
+                        if (Player2Payoffs[row, c] == maxPlayer2)
+                        {
+                        Player2BestResponses[row, c] = true;
+                        }
+                    }
+                }
+
+                // Find intersections of best responces (Nash Equalibrium Cells)
+
+                List<string> NashEqualibria = new List<string>(); //tenporary output
+
+                for (int r = 0; r < currentMatrix.rows; r++)
+                {
+                    for (int c = 0; c < currentMatrix.cols; c++)
+                    {
+                        // if both cells are true, they intersect
+                        if (Player1BestResponses[r, c] && Player2BestResponses[r, c])
+                        {
+                            NashEqualibria.Add($"{currentMatrix.Players[0]} chooses {currentMatrix.RowStrategies[r]}\n{currentMatrix.Players[1]} chooses {currentMatrix.ColStrategies[r]}\nThe payoffs are: {currentMatrix.payoffs[r, c]}");
+                        }
+                    }
+                }
+
+                //return results
+                if (NashEqualibria.Count > 0)
+                {
+                    string outputString = "Pure Strategy Nash Equilibria found:\n\n";
+                    foreach (string val in NashEqualibria)
+                    {
+                        outputString += val + "\n\n";
+                    }
+                    MessageBox.Show(outputString, "Output");
+                }
+                else
+                {
+                    MessageBox.Show("No Pure Strategy Nash Equilibrium exists.", "Output");
+                }
+
         }
 
     }
