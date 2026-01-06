@@ -99,9 +99,9 @@
             this.solveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.solveButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.solveButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.solveButton.Location = new System.Drawing.Point(54, 988);
+            this.solveButton.Location = new System.Drawing.Point(54, 977);
             this.solveButton.Name = "solveButton";
-            this.solveButton.Size = new System.Drawing.Size(193, 54);
+            this.solveButton.Size = new System.Drawing.Size(208, 65);
             this.solveButton.TabIndex = 12;
             this.solveButton.Text = "Solve";
             this.solveButton.UseVisualStyleBackColor = false;

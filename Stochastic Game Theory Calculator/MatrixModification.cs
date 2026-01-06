@@ -25,7 +25,6 @@ namespace Stochastic_Game_Theory_Calculator
         public void recieveMatrix(Models.Matrix matrix)
         {
             currentMatrix = copyMatrix(matrix);
-            currentMatrix.VersionsStack.Push(copyMatrix(currentMatrix));
         }
 
         public MatrixModification()
@@ -336,16 +335,12 @@ namespace Stochastic_Game_Theory_Calculator
             if (currentMatrix.VersionsStack.Count > 1)
             {
                 currentMatrix = copyMatrix(currentMatrix.VersionsStack.Pop());
-                DisplayMatrix(currentMatrix);
-            }
-            else if(currentMatrix.VersionsStack.Count == 1)
-            {
-                DisplayMatrix(currentMatrix);
             }
             else
             {
                 MessageBox.Show("First saved version displayed");
             }
+            DisplayMatrix(currentMatrix);
         }
 
     }   
