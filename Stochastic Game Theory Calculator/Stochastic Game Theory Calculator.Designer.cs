@@ -45,7 +45,7 @@
             this.ModelSelection.Location = new System.Drawing.Point(25, 104);
             this.ModelSelection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ModelSelection.Name = "ModelSelection";
-            this.ModelSelection.Size = new System.Drawing.Size(298, 48);
+            this.ModelSelection.Size = new System.Drawing.Size(135, 22);
             this.ModelSelection.TabIndex = 2;
             this.ModelSelection.Text = "Model Asembly";
             // 
@@ -130,7 +130,7 @@
             this.label1.Font = new System.Drawing.Font("Times New Roman", 10.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(5, 524);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(318, 37);
+            this.label1.Size = new System.Drawing.Size(145, 17);
             this.label1.TabIndex = 13;
             this.label1.Text = "Canvas Coordination";
             // 
@@ -192,9 +192,9 @@
             // 
             // mainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1495, 1083);
+            this.ClientSize = new System.Drawing.Size(1444, 881);
             this.Controls.Add(this.Canvas);
             this.Controls.Add(this.ModelSelectionPannel);
             this.Font = new System.Drawing.Font("Times New Roman", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));

@@ -86,8 +86,12 @@ namespace Stochastic_Game_Theory_Calculator
 
 
                     foreach(Models.Matrix m in savedMaticies)
-                    {
-                            if (matrix.GetHitbox().IntersectsWith(m.GetHitbox()))
+                    { 
+                           if(m == matrix)
+                           {
+                                     continue;
+                           }
+                            else if (matrix.GetHitbox().IntersectsWith(m.GetHitbox()))
                             {
                                 positionVerified = false;
                                 matrix.ChangeX(20);
@@ -214,8 +218,8 @@ namespace Stochastic_Game_Theory_Calculator
 
                     Canvas.Invalidate();
                 }
-                panning = false;
             }
+            panning = false;
         }
 
 
@@ -265,7 +269,7 @@ namespace Stochastic_Game_Theory_Calculator
                 }
             }
 
-            if (movingMatrix != null && e.Button == MouseButtons.Left)
+            if (movingMatrix == null && e.Button == MouseButtons.Left)
             {
                 panning = true;
                 previousPoint = e.Location;
@@ -617,9 +621,10 @@ namespace Stochastic_Game_Theory_Calculator
         private void lockalise_matricies_Click(object sender, EventArgs e)
         {
             foreach(Models.Matrix m in savedMaticies)
-
             {
-                    localise_matrix(m); 
+                m.SetX(150);
+                m.SetY(80);
+                localise_matrix(m); 
             }
             Canvas.Invalidate();
         }

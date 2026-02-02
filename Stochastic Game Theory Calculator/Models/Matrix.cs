@@ -20,8 +20,8 @@ namespace Stochastic_Game_Theory_Calculator.Models
         private string name;
         private Stack<Matrix> versionsStack;
         private string[] players;
-        private float x; //150
-        private float y; //80
+        private float x; 
+        private float y;
         private RectangleF hitbox;
         bool moving;
 
