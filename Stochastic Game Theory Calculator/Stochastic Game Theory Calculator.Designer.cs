@@ -45,7 +45,7 @@
             this.ModelSelection.Location = new System.Drawing.Point(25, 104);
             this.ModelSelection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ModelSelection.Name = "ModelSelection";
-            this.ModelSelection.Size = new System.Drawing.Size(135, 22);
+            this.ModelSelection.Size = new System.Drawing.Size(261, 42);
             this.ModelSelection.TabIndex = 2;
             this.ModelSelection.Text = "Model Asembly";
             // 
@@ -91,7 +91,7 @@
             this.ModelSelectionPannel.Controls.Add(this.MatrixInitialise);
             this.ModelSelectionPannel.Location = new System.Drawing.Point(12, 12);
             this.ModelSelectionPannel.Name = "ModelSelectionPannel";
-            this.ModelSelectionPannel.Size = new System.Drawing.Size(338, 1059);
+            this.ModelSelectionPannel.Size = new System.Drawing.Size(322, 985);
             this.ModelSelectionPannel.TabIndex = 5;
             // 
             // zoom_to_default
@@ -128,9 +128,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 10.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(5, 524);
+            this.label1.Location = new System.Drawing.Point(26, 523);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(145, 17);
+            this.label1.Size = new System.Drawing.Size(274, 32);
             this.label1.TabIndex = 13;
             this.label1.Text = "Canvas Coordination";
             // 
@@ -139,7 +139,7 @@
             this.solveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.solveButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.solveButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.solveButton.Location = new System.Drawing.Point(54, 977);
+            this.solveButton.Location = new System.Drawing.Point(54, 903);
             this.solveButton.Name = "solveButton";
             this.solveButton.Size = new System.Drawing.Size(208, 65);
             this.solveButton.TabIndex = 12;
@@ -178,9 +178,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Canvas.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.Location = new System.Drawing.Point(356, 12);
+            this.Canvas.Location = new System.Drawing.Point(340, 12);
             this.Canvas.Name = "Canvas";
-            this.Canvas.Size = new System.Drawing.Size(1127, 1059);
+            this.Canvas.Size = new System.Drawing.Size(1124, 985);
             this.Canvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Canvas.TabIndex = 6;
             this.Canvas.TabStop = false;
@@ -192,9 +192,9 @@
             // 
             // mainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 28F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1444, 881);
+            this.ClientSize = new System.Drawing.Size(1476, 1009);
             this.Controls.Add(this.Canvas);
             this.Controls.Add(this.ModelSelectionPannel);
             this.Font = new System.Drawing.Font("Times New Roman", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
