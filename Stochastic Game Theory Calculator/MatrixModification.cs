@@ -57,7 +57,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         }
 
-        private bool VerifyPayofsFloat()
+        public bool VerifyPayofsFloat()
         {
             string[] splitPayoff = null;
 
@@ -148,13 +148,21 @@ namespace Stochastic_Game_Theory_Calculator
                 if (r > 0)
                 {
                     MatrixBlueprint[0, r + 2].Value = "";
+                    MatrixBlueprint[0, r + 2].Style.BackColor = Color.Black;
                 }
                 for (int c = 0; c < currentMatrix.cols; c++)
                 {
                     MatrixBlueprint[c + 2, r + 2].Value = currentMatrix.payoffs[r, c];
+                    if (c > 0)
+                    {
+                        MatrixBlueprint[c + 2, 0].Style.BackColor = Color.Black;
+                    }
                 }
             }
             MatrixBlueprint.DefaultCellStyle.Font = new Font("Times New Roman", 14);
+            MatrixBlueprint[1, 0].Style.BackColor = Color.Black;
+            MatrixBlueprint[0, 1].Style.BackColor = Color.Black;
+            MatrixBlueprint[1, 1].Style.BackColor = Color.Black;
             MatrixBlueprint.RowTemplate.Height = 40;
             MatrixBlueprint[0, 2].Value = currentMatrix.Players[0];
             MatrixBlueprint[2, 0].Value = currentMatrix.Players[1];
@@ -177,7 +185,6 @@ namespace Stochastic_Game_Theory_Calculator
         private void AddRow_Click(object sender, EventArgs e)
         {
             SaveBeforeEdit();
-
             currentMatrix.rows += 1;
 
             string[,] temporaryPayoffs = new string[currentMatrix.rows, currentMatrix.cols];

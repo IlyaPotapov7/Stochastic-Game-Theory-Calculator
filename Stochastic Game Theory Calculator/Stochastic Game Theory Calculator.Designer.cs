@@ -26,14 +26,14 @@
             this.MatrixInitialise = new System.Windows.Forms.Button();
             this.tutorialButton = new System.Windows.Forms.Button();
             this.ModelSelectionPannel = new System.Windows.Forms.Panel();
+            this.zoom_to_default = new System.Windows.Forms.Button();
+            this.lockalise_matricies = new System.Windows.Forms.Button();
+            this.return_to_origin = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.solveButton = new System.Windows.Forms.Button();
             this.ConnectionInitialise = new System.Windows.Forms.Button();
             this.SimulationInitialise = new System.Windows.Forms.Button();
             this.Canvas = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.return_to_origin = new System.Windows.Forms.Button();
-            this.lockalise_matricies = new System.Windows.Forms.Button();
-            this.zoom_to_default = new System.Windows.Forms.Button();
             this.ModelSelectionPannel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.SuspendLayout();
@@ -45,7 +45,7 @@
             this.ModelSelection.Location = new System.Drawing.Point(25, 104);
             this.ModelSelection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ModelSelection.Name = "ModelSelection";
-            this.ModelSelection.Size = new System.Drawing.Size(261, 42);
+            this.ModelSelection.Size = new System.Drawing.Size(298, 48);
             this.ModelSelection.TabIndex = 2;
             this.ModelSelection.Text = "Model Asembly";
             // 
@@ -91,8 +91,48 @@
             this.ModelSelectionPannel.Controls.Add(this.MatrixInitialise);
             this.ModelSelectionPannel.Location = new System.Drawing.Point(12, 12);
             this.ModelSelectionPannel.Name = "ModelSelectionPannel";
-            this.ModelSelectionPannel.Size = new System.Drawing.Size(322, 1059);
+            this.ModelSelectionPannel.Size = new System.Drawing.Size(338, 1059);
             this.ModelSelectionPannel.TabIndex = 5;
+            // 
+            // zoom_to_default
+            // 
+            this.zoom_to_default.Location = new System.Drawing.Point(54, 677);
+            this.zoom_to_default.Name = "zoom_to_default";
+            this.zoom_to_default.Size = new System.Drawing.Size(208, 53);
+            this.zoom_to_default.TabIndex = 17;
+            this.zoom_to_default.Text = "Default Zoom";
+            this.zoom_to_default.UseVisualStyleBackColor = true;
+            this.zoom_to_default.Click += new System.EventHandler(this.zoom_to_default_Click);
+            // 
+            // lockalise_matricies
+            // 
+            this.lockalise_matricies.Location = new System.Drawing.Point(54, 764);
+            this.lockalise_matricies.Name = "lockalise_matricies";
+            this.lockalise_matricies.Size = new System.Drawing.Size(208, 53);
+            this.lockalise_matricies.TabIndex = 16;
+            this.lockalise_matricies.Text = "Localise Matricies";
+            this.lockalise_matricies.UseVisualStyleBackColor = true;
+            this.lockalise_matricies.Click += new System.EventHandler(this.lockalise_matricies_Click);
+            // 
+            // return_to_origin
+            // 
+            this.return_to_origin.Location = new System.Drawing.Point(54, 593);
+            this.return_to_origin.Name = "return_to_origin";
+            this.return_to_origin.Size = new System.Drawing.Size(208, 54);
+            this.return_to_origin.TabIndex = 14;
+            this.return_to_origin.Text = "Return to origin";
+            this.return_to_origin.UseVisualStyleBackColor = true;
+            this.return_to_origin.Click += new System.EventHandler(this.return_to_origin_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Times New Roman", 10.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(5, 524);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(318, 37);
+            this.label1.TabIndex = 13;
+            this.label1.Text = "Canvas Coordination";
             // 
             // solveButton
             // 
@@ -138,9 +178,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Canvas.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.Location = new System.Drawing.Point(340, 12);
+            this.Canvas.Location = new System.Drawing.Point(356, 12);
             this.Canvas.Name = "Canvas";
-            this.Canvas.Size = new System.Drawing.Size(1143, 1059);
+            this.Canvas.Size = new System.Drawing.Size(1127, 1059);
             this.Canvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.Canvas.TabIndex = 6;
             this.Canvas.TabStop = false;
@@ -150,49 +190,9 @@
             this.Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseMove);
             this.Canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Canvas_MouseUp);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Times New Roman", 10.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(26, 521);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(274, 32);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "Canvas Coordination";
-            // 
-            // return_to_origin
-            // 
-            this.return_to_origin.Location = new System.Drawing.Point(54, 593);
-            this.return_to_origin.Name = "return_to_origin";
-            this.return_to_origin.Size = new System.Drawing.Size(208, 54);
-            this.return_to_origin.TabIndex = 14;
-            this.return_to_origin.Text = "Return to origin";
-            this.return_to_origin.UseVisualStyleBackColor = true;
-            this.return_to_origin.Click += new System.EventHandler(this.return_to_origin_Click);
-            // 
-            // lockalise_matricies
-            // 
-            this.lockalise_matricies.Location = new System.Drawing.Point(54, 764);
-            this.lockalise_matricies.Name = "lockalise_matricies";
-            this.lockalise_matricies.Size = new System.Drawing.Size(208, 53);
-            this.lockalise_matricies.TabIndex = 16;
-            this.lockalise_matricies.Text = "Localise Matricies";
-            this.lockalise_matricies.UseVisualStyleBackColor = true;
-            this.lockalise_matricies.Click += new System.EventHandler(this.lockalise_matricies_Click);
-            // 
-            // zoom_to_default
-            // 
-            this.zoom_to_default.Location = new System.Drawing.Point(54, 677);
-            this.zoom_to_default.Name = "zoom_to_default";
-            this.zoom_to_default.Size = new System.Drawing.Size(208, 53);
-            this.zoom_to_default.TabIndex = 17;
-            this.zoom_to_default.Text = "Default Zoom";
-            this.zoom_to_default.UseVisualStyleBackColor = true;
-            this.zoom_to_default.Click += new System.EventHandler(this.zoom_to_default_Click);
-            // 
             // mainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 28F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1495, 1083);
             this.Controls.Add(this.Canvas);

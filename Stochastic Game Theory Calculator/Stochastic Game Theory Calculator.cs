@@ -31,6 +31,8 @@ namespace Stochastic_Game_Theory_Calculator
 
         int CellBuffer = 5;
 
+        public bool editingMatrix;
+
         private float zoomDelta = 0.9f;
         private PointF zoomFocus = new PointF(0, 0);
         private PointF originPoint = new PointF(0,0);
@@ -114,22 +116,34 @@ namespace Stochastic_Game_Theory_Calculator
 
         public void editMatrix()
         {
+            editingMatrix = true;
             MatrixModification MM = new MatrixModification();
             MM.recieveMatrix(currentMatrix);
             MM.ShowDialog();
 
-            if (MM.deleted)
+            while (editingMatrix)
             {
-                savedMaticies[currentMatrix.MatrixID] = null;
+                if (MM.deleted)
+                {
+                    savedMaticies[currentMatrix.MatrixID] = null;
+                    editingMatrix = false;
+                }
+                else if (MM.isSaved)
+                {
+                    if (MM.VerifyPayofsFloat())
+                    {
+                        currentMatrix = MM.currentMatrix;
+                        localise_matrix(currentMatrix);
+                        savedMaticies[currentMatrix.MatrixID] = MM.currentMatrix;
+                        editingMatrix = false;
+                    }
+                    else
+                    {
+                        MM.ShowDialog();
+                    }
+                }
             }
-            else if (MM.isSaved)
-            {
-                currentMatrix = MM.currentMatrix;
-                localise_matrix(currentMatrix);
-                savedMaticies[currentMatrix.MatrixID] = MM.currentMatrix;
-            }
-
-            Canvas.Invalidate();
+                Canvas.Invalidate();
         }
         private void tutorialButton_Click(object sender, EventArgs e)
         {
@@ -312,25 +326,35 @@ namespace Stochastic_Game_Theory_Calculator
             return maxWidth;
 
         }
+        //this method will contain all drawing logic for the canvas
+        
+        //I was not familiar with drawing on bitmap images in C# so I asked Google Gemeni to teach me the basics and I also I asked it for help when I had bugs in my implementation
         private void DrawMatrix(Graphics g, Models.Matrix matrix)
         {
+            //display the origin location for refference
+            g.DrawString("*", origin_font, Brushes.Red, originPoint);
+
+            //set default cell height
             float cellHight = 60;
-            float cellWidth = 100;
-
+            //find the max width column and compare it with default cell width of a 100
             float contentWidth = LongestCol(matrix, g);
-            cellWidth = Math.Max(cellHight, contentWidth + (CellBuffer * 2));
+            float cellWidth = Math.Max(100, contentWidth + (CellBuffer * 2));
 
+            //find dimentions of the grid of the matrix
             float gridW = matrix.cols * cellWidth;
             float gridH = matrix.rows * cellHight;
-
+            
+            //initialise the matrix rectangle, fill it with white background and draw the external bounds
             RectangleF currentGrid = new RectangleF(matrix.X + cellWidth, matrix.Y + cellHight, gridW, gridH);
             g.FillRectangle(Brushes.White, currentGrid);
             g.DrawRectangle(Pens.Black, currentGrid.X, currentGrid.Y, currentGrid.Width, currentGrid.Height);
 
+            //initialise a pen to draw the contents of the matrix and the format of the strings that will be drawn
             using (Pen gridPen = new Pen(Color.Black, 1))
             using (StringFormat format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
             {
-                g.DrawString(matrix.Players[0], player_font, Brushes.Black, new PointF(matrix.X - (g.MeasureString(matrix.Players[0], player_font).Width / 2) - CellBuffer, matrix.Y + cellHight + (gridH / 2)), format);
+                //Draw the player names and the name of the game
+                g.DrawString(matrix.Players[0], player_font, Brushes.Black, new PointF(matrix.X - (g.MeasureString(matrix.Players[0], player_font).Width / 2) - CellBuffer, matrix.Y + cellHight + (gridH / 2)), format); // I couldnt work out how to allign the name vertically as it cept on clashing with strategies so I asked Gemeni for a robust maths that ensures perfect allignment 
                 g.DrawString(matrix.Players[1], player_font, Brushes.Black, new PointF(matrix.X + cellWidth + (gridW / 2), matrix.Y - 10), format);
                 g.DrawString(matrix.Name, name_font, Brushes.Black, new PointF(matrix.X,matrix.Y), format);
 
@@ -357,15 +381,18 @@ namespace Stochastic_Game_Theory_Calculator
                 }
             }
 
-            g.DrawString("*", origin_font, Brushes.Red, originPoint);
         }
 
+        //this method will handel the mousewheel input and in responce change the level of zoom on the canvas
         private void Canvas_MouseWheel(object sender, MouseEventArgs e)
         {
+            //i need to convert the world coordinates into screen coordinates
+            //first, handle the shift of the focus point X - ZoomFocus and account for the zoom by deviding the current difference by the change in zoom
 
             float canvasX = (e.X - zoomFocus.X) / zoomDelta;
             float canvasY = (e.Y - zoomFocus.Y) / zoomDelta;
 
+            //if zoom is positive, increment by 10% ech time, if zoom is negative, fecrease by 10%
             if(e.Delta > 0)
             {
                 zoomDelta = zoomDelta * 1.1f;
@@ -375,6 +402,7 @@ namespace Stochastic_Game_Theory_Calculator
                 zoomDelta = zoomDelta * 0.9f;
             }
 
+            // Set limits on how big or small zoom can be
             if (zoomDelta < 0.3f)
             {
                 zoomDelta = 0.3f;
@@ -384,9 +412,11 @@ namespace Stochastic_Game_Theory_Calculator
                 zoomDelta = 4.0f;
             }
 
+            //make the actual change to how the image looks, e.X and e.Y are the centre or the focus - saceld world distance (as a reuslt the point of zoom is alligned with the location of the mouse
             zoomFocus.X = e.X - (canvasX * zoomDelta);
             zoomFocus.Y = e.Y - (canvasY * zoomDelta);
 
+            //update the changes to the canvas
             Canvas.Invalidate();
         }
 
@@ -423,6 +453,8 @@ namespace Stochastic_Game_Theory_Calculator
             }
         }
 
+
+        //I will use this method as a safety boundariy so that is the user clicks anything else during matrix selection process, he will have to either terminate selection or be remined that he is selecting a m atrix
         private bool stopSelection()
         {
             if (matrixSelection)
@@ -445,7 +477,7 @@ namespace Stochastic_Game_Theory_Calculator
             //first i have to identify what matrix to solve, if there are more than 1, user will have to select which one
             currentMatrix = null;
             int matrixCount = 0;
-
+            //filter out null matricies in saved matricies
             for (int i = 0; i < matrixID; i++)
             {
                 if (savedMaticies[i] != null)
@@ -465,6 +497,7 @@ namespace Stochastic_Game_Theory_Calculator
             }
             else
             {
+                //if there is only one matrix, it can be anywhere in the array, so filter it out to find it
                 for (int i = 0; i < matrixID; i++)
                 {
                     if (savedMaticies[i] != null)
@@ -479,14 +512,15 @@ namespace Stochastic_Game_Theory_Calculator
         private void solveButton_Click(object sender, EventArgs e)
         {
             select_Matrix();
-            //now, the current matrix is the matrix that the user wants to solve, so we can implement the algorithm
+            //now, the current matrix is the matrix that the user wants to solve, so we can implement the solving algorithm
         }
 
         public void BestResponceEnumeration()
         {
+            //I have asked Chat GPT what would be the best algorithm to solve pure strategy normal form games, I was originally considering IESDS but it only finds nash equalibria that is in the strictly dominant strategies. Although it it more time efficient, i chose BRE because is finds all equalibria
             MessageBox.Show(currentMatrix.Name + " will now be solved via the Best Responce Enumeration Algorithm");
 
-            //prepare data for comparison, from easy to display form into easy to analyse form
+            //prepare data for comparison, i need some way of marking cells in rows and columns as best responces in order to compare them later to find the intersection and also do maths with them
 
             bool[,] Player1BestResponses = new bool[currentMatrix.rows, currentMatrix.cols];
             bool[,] Player2BestResponses = new bool[currentMatrix.rows, currentMatrix.cols];
@@ -500,25 +534,26 @@ namespace Stochastic_Game_Theory_Calculator
                 {
                     for (int column = 0; column < currentMatrix.cols; column++)
                     {
-                        string rawText = currentMatrix.payoffs[row, column];
-                        string[] parts = rawText.Split(':');
+                        string stringPayoff = currentMatrix.payoffs[row, column];
+                        string[] parts = stringPayoff.Split(':');
 
                     Player1Payoffs[row, column] = float.Parse(parts[0]);
                     Player2Payoffs[row, column] = float.Parse(parts[1]);
                     }
                 }
 
+            // now actual logic of the algorithm 
 
                 //fix the column for player 2
                 for (int col = 0; col < currentMatrix.cols; col++)
                 {
-                    //finds the payoff for player 1 for a column
-                    float maxPlayer1 = -999999999999999999;
+                    //finds the payoff for player 1 for a currently fixed column
+                    float maxPlayer1 = -999999999999999999; //assume the current payoff for player1 is as bad as bossible as so in the first comparsion the first payoff will always be better not matter how bad it is
                     for (int row = 0; row < currentMatrix.rows; row++)
                     {
-                        if (Player1Payoffs[ row, col] > maxPlayer1)
+                        if (Player1Payoffs[row, col] > maxPlayer1)
                         {
-                            maxPlayer1 = Player1Payoffs[row, col];
+                            maxPlayer1 = Player1Payoffs[row, col]; 
                         }
                     }
 
@@ -593,21 +628,26 @@ namespace Stochastic_Game_Theory_Calculator
         {
             if (!stopSelection())
             {
-                
+                //add
             }
         }
 
+        //now i will add methods for easier canvas navigation 
+
+        // origin is the red dot in the top left corner next to which matricies appear when they are initialised
         private void return_to_origin_Click(object sender, EventArgs e)
         {
             zoomFocus = originPoint;
             Canvas.Invalidate();
         }
 
+
+        //make all matricies appear close to origin so no matricies are lost
         private void lockalise_matricies_Click(object sender, EventArgs e)
         {
             for(int i = 0; i < matrixID; i++)
             {
-                if (savedMaticies[i] == null)
+                if (savedMaticies[i] == null)//filter out empty matrix slots
                 {
                     continue;
                 }
@@ -619,6 +659,7 @@ namespace Stochastic_Game_Theory_Calculator
             Canvas.Invalidate();
         }
 
+        //return zoom to default value if too zoomed in on something too much or out too much, more of a shortcut than anything else
         private void zoom_to_default_Click(object sender, EventArgs e)
         {
             zoomDelta = 0.9f;

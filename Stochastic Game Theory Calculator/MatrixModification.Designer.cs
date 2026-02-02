@@ -91,7 +91,7 @@
             // AddRow
             // 
             this.AddRow.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.AddRow.Location = new System.Drawing.Point(37, 526);
+            this.AddRow.Location = new System.Drawing.Point(33, 507);
             this.AddRow.Name = "AddRow";
             this.AddRow.Size = new System.Drawing.Size(132, 35);
             this.AddRow.TabIndex = 2;
@@ -102,7 +102,7 @@
             // DeleteRow
             // 
             this.DeleteRow.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.DeleteRow.Location = new System.Drawing.Point(26, 572);
+            this.DeleteRow.Location = new System.Drawing.Point(22, 553);
             this.DeleteRow.Name = "DeleteRow";
             this.DeleteRow.Size = new System.Drawing.Size(153, 35);
             this.DeleteRow.TabIndex = 3;
@@ -113,7 +113,7 @@
             // AddColumn
             // 
             this.AddColumn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.AddColumn.Location = new System.Drawing.Point(236, 526);
+            this.AddColumn.Location = new System.Drawing.Point(232, 507);
             this.AddColumn.Name = "AddColumn";
             this.AddColumn.Size = new System.Drawing.Size(169, 35);
             this.AddColumn.TabIndex = 4;
@@ -124,7 +124,7 @@
             // DeleteColumn
             // 
             this.DeleteColumn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.DeleteColumn.Location = new System.Drawing.Point(221, 572);
+            this.DeleteColumn.Location = new System.Drawing.Point(217, 553);
             this.DeleteColumn.Name = "DeleteColumn";
             this.DeleteColumn.Size = new System.Drawing.Size(193, 35);
             this.DeleteColumn.TabIndex = 5;
@@ -157,7 +157,7 @@
             // 
             // MatrixModification
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 27F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1169, 619);
             this.Controls.Add(this.saved_back);
