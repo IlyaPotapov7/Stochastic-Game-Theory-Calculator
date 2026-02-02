@@ -18,8 +18,8 @@ namespace Stochastic_Game_Theory_Calculator
         // Here I will initialise variables for all subroutines to make them easier to organise and find
 
         private Models.Matrix currentMatrix;
-        public Models.Matrix[] savedMaticies;
-        public int matrixID = 0;
+        public List<Models.Matrix> savedMaticies;
+        public Models.Matrix movingMatrix;
 
         private int currentSimulations;
 
@@ -37,7 +37,6 @@ namespace Stochastic_Game_Theory_Calculator
         private PointF zoomFocus = new PointF(0, 0);
         private PointF originPoint = new PointF(0,0);
 
-        private int movingMatrixID = -1;
         private PointF selectPoint = new PointF(0, 0);
         private PointF startingPosition = new PointF(0, 0);
         private bool isDragged = false;
@@ -55,7 +54,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            savedMaticies = new Models.Matrix[999999];
+            savedMaticies = new List<Models.Matrix>();
             
         }
 
@@ -66,8 +65,6 @@ namespace Stochastic_Game_Theory_Calculator
             {
                 currentMatrix = new Models.Matrix();
                 currentMatrix = currentMatrix.defaultMatrix();
-                currentMatrix.SetMatrixID(matrixID);
-                matrixID++;
                 editMatrix();
             }
         }
@@ -88,22 +85,15 @@ namespace Stochastic_Game_Theory_Calculator
                     matrix.SetHitbox(MatrixBounds(matrix, g));
 
 
-                    for (int i = 0; i < matrixID; i++)
+                    foreach(Models.Matrix m in savedMaticies)
                     {
-                        if (savedMaticies[i] == null || savedMaticies[i].GetMatrixID() == matrix.GetMatrixID())
-                        {
-                            continue;
-                        }
-                        else if (savedMaticies[i] != null)
-                        {
-                            if (matrix.GetHitbox().IntersectsWith(savedMaticies[i].GetHitbox()))
+                            if (matrix.GetHitbox().IntersectsWith(m.GetHitbox()))
                             {
                                 positionVerified = false;
                                 matrix.ChangeX(20);
                                 matrix.ChangeY(20);
                                 break;
                             }
-                        }
 
                     }
 
@@ -124,15 +114,16 @@ namespace Stochastic_Game_Theory_Calculator
                 EditingMatrix = false;
                 if (MM.deleted)
                 {
-                    savedMaticies[currentMatrix.GetMatrixID()] = null;
+                    savedMaticies.Remove(currentMatrix);
                 }
                 else if (MM.isSaved)
                 {
                     if (MM.VerifyPayofsFloat())
                     {
+                        savedMaticies.Remove(currentMatrix);
                         currentMatrix = MM.currentMatrix;
                         localise_matrix(currentMatrix);
-                        savedMaticies[currentMatrix.GetMatrixID()] = MM.currentMatrix;
+                        savedMaticies.Add(MM.currentMatrix);
                     }
                     else
                     {
@@ -157,14 +148,14 @@ namespace Stochastic_Game_Theory_Calculator
         }
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDragged && movingMatrixID > -1)
+            if (isDragged && movingMatrix != null)
             {
                 //get current world mouse position
                 PointF worldMouseCoord = screenToWorldTranslate(e.Location);
 
                 //new matrix position
-                savedMaticies[movingMatrixID].SetX(worldMouseCoord.X - selectPoint.X);
-                savedMaticies[movingMatrixID].SetY(worldMouseCoord.Y - selectPoint.Y);
+                movingMatrix.SetX(worldMouseCoord.X - selectPoint.X);
+                movingMatrix.SetY(worldMouseCoord.Y - selectPoint.Y);
 
                 Canvas.Invalidate();
             }
@@ -179,53 +170,55 @@ namespace Stochastic_Game_Theory_Calculator
         }
         private void Canvas_MouseUp(object sender, MouseEventArgs e)
         {
-            if (isDragged && movingMatrixID > -1)
+            if (isDragged && movingMatrix != null)
             {
                 bool collision = false;
 
                 using (Graphics g = this.CreateGraphics())
                 {
-                    savedMaticies[movingMatrixID].SetHitbox(MatrixBounds(savedMaticies[movingMatrixID], g));
+                    movingMatrix.SetHitbox(MatrixBounds(movingMatrix, g));
 
-                    for (int i = 0; i < matrixID; i++)
+                    foreach (Models.Matrix savedMatrix in savedMaticies)
                     {
-                        //avoid checking coordinates of the dragged matrix with it's old position
-                        if (i == movingMatrixID)
                         {
-                            continue;
-                        }
+                            //avoid checking coordinates of the dragged matrix with it's old position
+                            if (savedMatrix.IsMoving())
+                            {
+                                continue;
+                            }
 
-                        if (savedMaticies[i] != null)
-                        {
                             //get the dymentions of the matrix that is being compared with
 
-                            savedMaticies[i].SetHitbox(MatrixBounds(savedMaticies[i], g));
+                            savedMatrix.SetHitbox(MatrixBounds(savedMatrix, g));
 
-                            if (savedMaticies[i].GetHitbox().IntersectsWith(savedMaticies[movingMatrixID].GetHitbox()))
+                            if (savedMatrix.GetHitbox().IntersectsWith(movingMatrix.GetHitbox()))
                             {
                                 collision = true;
                                 break;
                             }
+
                         }
-
                     }
+                    //if the collision happens, the moving matrix returns back to where it was before the movement
+
+                    if (collision)
+                    {
+                        movingMatrix.SetX(startingPosition.X);
+                        movingMatrix.SetY(startingPosition.Y);
+                        MessageBox.Show("Matrices cannot overlap");
+                    }
+
+                    isDragged = false;
+                    movingMatrix.SetIsMoving(false);
+                    movingMatrix = null;
+
+                    Canvas.Invalidate();
                 }
-                //if the collision happens, the moving matrix returns back to where it was before the movement
-
-                if (collision)
-                {
-                    savedMaticies[movingMatrixID].SetX(startingPosition.X);
-                    savedMaticies[movingMatrixID].SetY(startingPosition.Y);
-                    MessageBox.Show("Matrices cannot overlap");
-                }
-
-                isDragged = false;
-                movingMatrixID = -1;
-
-                Canvas.Invalidate();
+                panning = false;
             }
-            panning = false;
         }
+
+
         private void Canvas_MouseDown(object sender, MouseEventArgs e)
         {
             PointF worldMouseLocation = screenToWorldTranslate(e.Location);
@@ -233,9 +226,8 @@ namespace Stochastic_Game_Theory_Calculator
             using (Graphics g = this.CreateGraphics())
             {
 
-                for (int i = 0; i < matrixID; i++)
+                foreach(Models.Matrix matrix in savedMaticies)
                 {
-                    Models.Matrix matrix = savedMaticies[i];
                     if (matrix != null)
                     {
                         matrix.SetHitbox(MatrixBounds(matrix, g));
@@ -259,7 +251,8 @@ namespace Stochastic_Game_Theory_Calculator
                         }
                         else if (matrix.GetHitbox().Contains(worldMouseLocation))
                         {
-                            movingMatrixID = i;
+                            movingMatrix = matrix;
+                            movingMatrix.SetIsMoving(true);
                             isDragged = true;
 
                             selectPoint = new PointF(worldMouseLocation.X - matrix.GetX(), worldMouseLocation.Y - matrix.GetY());
@@ -272,7 +265,7 @@ namespace Stochastic_Game_Theory_Calculator
                 }
             }
 
-            if (movingMatrixID == -1 && e.Button == MouseButtons.Left)
+            if (movingMatrix != null && e.Button == MouseButtons.Left)
             {
                 panning = true;
                 previousPoint = e.Location;
@@ -474,38 +467,18 @@ namespace Stochastic_Game_Theory_Calculator
         {
             //first i have to identify what matrix to solve, if there are more than 1, user will have to select which one
             currentMatrix = null;
-            int matrixCount = 0;
-            //filter out null matricies in saved matricies
-            for (int i = 0; i < matrixID; i++)
-            {
-                if (savedMaticies[i] != null)
-                {
-                    matrixCount++;
-                }
-            }
+            int matrixCount = savedMaticies.Count();
 
             if(matrixCount == 0)
             {
                 MessageBox.Show("There are currently no existing matrix");
             }
-            else if(matrixCount > 1)
+            else
             {
                 MessageBox.Show("Please select a matrix to solve"); 
                 matrixSelection = true;
             }
-            else
-            {
-                //if there is only one matrix, it can be anywhere in the array, so filter it out to find it
-                for (int i = 0; i < matrixID; i++)
-                {
-                    if (savedMaticies[i] != null)
-                    {
-                        currentMatrix = savedMaticies[i];
-                    }
-                }
 
-                BestResponceEnumeration();
-            }
         }
         private void solveButton_Click(object sender, EventArgs e)
         {
@@ -643,16 +616,10 @@ namespace Stochastic_Game_Theory_Calculator
         //make all matricies appear close to origin so no matricies are lost
         private void lockalise_matricies_Click(object sender, EventArgs e)
         {
-            for(int i = 0; i < matrixID; i++)
+            foreach(Models.Matrix m in savedMaticies)
+
             {
-                if (savedMaticies[i] == null)//filter out empty matrix slots
-                {
-                    continue;
-                }
-                else
-                {
-                    localise_matrix(savedMaticies[i]); 
-                }
+                    localise_matrix(m); 
             }
             Canvas.Invalidate();
         }

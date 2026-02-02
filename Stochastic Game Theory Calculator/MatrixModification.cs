@@ -307,8 +307,6 @@ namespace Stochastic_Game_Theory_Calculator
             updatedMatrix.SetX(originalMatrix.GetX());
             updatedMatrix.SetY(originalMatrix.GetY());
 
-            updatedMatrix.SetMatrixID(originalMatrix.GetMatrixID());
-
             updatedMatrix.SetPayoffs(originalMatrix.GetPayoffs());
 
             updatedMatrix.SetPlayers(originalMatrix.GetPlayers());

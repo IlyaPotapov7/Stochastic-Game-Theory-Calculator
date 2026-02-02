@@ -20,12 +20,12 @@ namespace Stochastic_Game_Theory_Calculator.Models
         private string name;
         private Stack<Matrix> versionsStack;
         private string[] players;
-        private int matrixID;
         private float x; //150
         private float y; //80
         private RectangleF hitbox;
+        bool moving;
 
-        public Matrix(int Rows, int Cols, string[,] Payoffs, string[] RowStrategies, string[] ColStrategies, string Name, Stack<Matrix> VersionsStack, string[] Players, int MatrixID,float X, float Y, RectangleF Hitbox)
+        public Matrix(int Rows, int Cols, string[,] Payoffs, string[] RowStrategies, string[] ColStrategies, string Name, Stack<Matrix> VersionsStack, string[] Players,float X, float Y, RectangleF Hitbox)
         {
             rows = Rows;
             cols = Cols;
@@ -182,15 +182,6 @@ namespace Stochastic_Game_Theory_Calculator.Models
             players[index] = Player;
         }
 
-        public int GetMatrixID()
-        {
-            return matrixID;
-        }
-
-        public void SetMatrixID(int MatrixID)
-        {
-            matrixID = MatrixID;
-        }
         public float GetX()
         {
             return x;
@@ -218,7 +209,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public void ChangeY(float Y)
         {
-            y =+ Y;
+            y += Y;
         }
         public RectangleF GetHitbox()
         {
@@ -229,6 +220,16 @@ namespace Stochastic_Game_Theory_Calculator.Models
         {
             hitbox = Hitbox;
         }
+
+        public bool IsMoving()
+        {
+            return moving;
+        }
+
+        public void SetIsMoving(bool Moving)
+        {
+            moving = Moving; 
+        }
         public Matrix defaultMatrix()
         {
             string[,] defaultPayoffs = { { "3:3", "0:4" }, { "4:0", "2:2" } };
@@ -238,7 +239,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
             string defaultName = "Default Name";
             Stack<Matrix> defaultStack = new Stack<Matrix>();
             RectangleF defaultRectangle = new RectangleF();
-            Matrix defaultMatrix = new Matrix(2, 2, defaultPayoffs, defaultRowStrategies, defaultColStrategies, defaultName, defaultStack, defaultPlayers, -1, 150, 80, defaultRectangle);
+            Matrix defaultMatrix = new Matrix(2, 2, defaultPayoffs, defaultRowStrategies, defaultColStrategies, defaultName, defaultStack, defaultPlayers, 150, 80, defaultRectangle);
             return defaultMatrix;
         }
     }
