@@ -61,9 +61,9 @@ namespace Stochastic_Game_Theory_Calculator
         {
             string[] splitPayoff = null;
 
-            for(int r = 0; r < currentMatrix.rows; r++)
+            for(int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                for (int x = 0; x < currentMatrix.cols; x++)
+                for (int x = 0; x < currentMatrix.GetCols(); x++)
                 {
                     object cellValue = MatrixBlueprint[x + 2, r + 2].Value;
 
@@ -85,8 +85,8 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void MatrixModification_Load(object sender, EventArgs e)
         {
-            MatrixBlueprint.RowCount = currentMatrix.rows + 2;
-            MatrixBlueprint.ColumnCount = currentMatrix.cols + 2;
+            MatrixBlueprint.RowCount = currentMatrix.GetRows() + 2;
+            MatrixBlueprint.ColumnCount = currentMatrix.GetCols() + 2;
             MatrixBlueprint.ColumnHeadersVisible = false;
             MatrixBlueprint.RowHeadersVisible = false;
             MatrixBlueprint[0, 0].ReadOnly = false;
@@ -102,7 +102,7 @@ namespace Stochastic_Game_Theory_Calculator
         {
             if(VerifyPayofsFloat())
             {
-                currentMatrix.VersionsStack.Push(copyMatrix(currentMatrix));
+                currentMatrix.PushVersionStack(copyMatrix(currentMatrix));
                 SaveBeforeEdit();
                 MessageBox.Show("Model Saved");
                 isSaved = true;
@@ -111,48 +111,48 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void SaveBeforeEdit()
         {
-            for (int r = 0; r < currentMatrix.rows; r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                for (int c = 0; c < currentMatrix.cols; c++)
+                for (int c = 0; c < currentMatrix.GetCols(); c++)
                 {
-                    currentMatrix.payoffs[r, c] = MatrixBlueprint[c + 2, r + 2].Value.ToString();
+                    currentMatrix.SetOnePayoff(r, c, MatrixBlueprint[c + 2, r + 2].Value.ToString());
                 }
             }
-            for (int c = 0; c < currentMatrix.cols; c++)
+            for (int c = 0; c < currentMatrix.GetCols(); c++)
             {
-                currentMatrix.ColStrategies[c] = MatrixBlueprint[c + 2, 1].Value.ToString();
+                currentMatrix.SetOneColStrategy(c,MatrixBlueprint[c + 2, 1].Value.ToString());
             }
 
-            for (int r = 0; r < currentMatrix.rows; r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                currentMatrix.RowStrategies[r] = MatrixBlueprint[1, r + 2].Value.ToString();
+                currentMatrix.SetOneRowStrategy(r, MatrixBlueprint[1, r + 2].Value.ToString());
             }
-            currentMatrix.Players[0] = MatrixBlueprint[0, 2].Value.ToString();
-            currentMatrix.Players[1] = MatrixBlueprint[2, 0].Value.ToString();
-            currentMatrix.Name = MatrixBlueprint[0,0].Value.ToString();
+            currentMatrix.SetOnePlayer(0,MatrixBlueprint[0, 2].Value.ToString());
+            currentMatrix.SetOnePlayer(1,MatrixBlueprint[2, 0].Value.ToString());
+            currentMatrix.SetName(MatrixBlueprint[0,0].Value.ToString());
         }
 
         public void DisplayMatrix(Models.Matrix matrix)
         {
             currentMatrix = matrix;
-            MatrixBlueprint.RowCount = currentMatrix.rows + 2;
-            MatrixBlueprint.ColumnCount = currentMatrix.cols + 2;
+            MatrixBlueprint.RowCount = currentMatrix.GetRows() + 2;
+            MatrixBlueprint.ColumnCount = currentMatrix.GetCols() + 2;
 
             MatrixBlueprint.ColumnHeadersVisible = false;
             MatrixBlueprint.RowHeadersVisible = false;
 
             MatrixBlueprint.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            for (int r = 0; r < currentMatrix.rows; r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
                 if (r > 0)
                 {
                     MatrixBlueprint[0, r + 2].Value = "";
                     MatrixBlueprint[0, r + 2].Style.BackColor = Color.Black;
                 }
-                for (int c = 0; c < currentMatrix.cols; c++)
+                for (int c = 0; c < currentMatrix.GetCols(); c++)
                 {
-                    MatrixBlueprint[c + 2, r + 2].Value = currentMatrix.payoffs[r, c];
+                    MatrixBlueprint[c + 2, r + 2].Value = currentMatrix.GetOnePayoff(r, c);
                     if (c > 0)
                     {
                         MatrixBlueprint[c + 2, 0].Style.BackColor = Color.Black;
@@ -164,20 +164,20 @@ namespace Stochastic_Game_Theory_Calculator
             MatrixBlueprint[0, 1].Style.BackColor = Color.Black;
             MatrixBlueprint[1, 1].Style.BackColor = Color.Black;
             MatrixBlueprint.RowTemplate.Height = 40;
-            MatrixBlueprint[0, 2].Value = currentMatrix.Players[0];
-            MatrixBlueprint[2, 0].Value = currentMatrix.Players[1];
-            MatrixBlueprint[0, 0].Value = currentMatrix.Name;
+            MatrixBlueprint[0, 2].Value = currentMatrix.GetOnePlayer(0);
+            MatrixBlueprint[2, 0].Value = currentMatrix.GetOnePlayer(1);
+            MatrixBlueprint[0, 0].Value = currentMatrix.GetName();
 
-            for (int c = 0; c < currentMatrix.cols; c++)
+            for (int c = 0; c < currentMatrix.GetCols(); c++)
             {
-                MatrixBlueprint[c + 2, 1].Value = currentMatrix.ColStrategies[c];
+                MatrixBlueprint[c + 2, 1].Value = currentMatrix.GetOneColStrategy(c);
             }
 
 
 
-            for (int r = 0; r < currentMatrix.rows; r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                MatrixBlueprint[1, r + 2].Value = currentMatrix.RowStrategies[r];
+                MatrixBlueprint[1, r + 2].Value = currentMatrix.GetOneRowStrategy(r);
             }
             AccesabilityLimit();
         }
@@ -185,115 +185,115 @@ namespace Stochastic_Game_Theory_Calculator
         private void AddRow_Click(object sender, EventArgs e)
         {
             SaveBeforeEdit();
-            currentMatrix.rows += 1;
+            currentMatrix.ChangeCols(1);
 
-            string[,] temporaryPayoffs = new string[currentMatrix.rows, currentMatrix.cols];
-            string[] temporaryRowStrategies = new string[currentMatrix.rows];
+            string[,] temporaryPayoffs = new string[currentMatrix.GetRows(), currentMatrix.GetCols()];
+            string[] temporaryRowStrategies = new string[currentMatrix.GetRows()];
 
-            for (int r = 0; r < currentMatrix.rows-1; r++)
+            for (int r = 0; r < currentMatrix.GetRows()-1; r++)
             {
-                temporaryRowStrategies[r] = currentMatrix.RowStrategies[r];
+                temporaryRowStrategies[r] = currentMatrix.GetOneRowStrategy(r);
             }
 
-            for (int r = 0; r < currentMatrix.rows-1; r++)
+            for (int r = 0; r < currentMatrix.GetRows() - 1; r++)
             {
-                for (int c = 0; c < currentMatrix.cols; c++)
+                for (int c = 0; c < currentMatrix.GetCols(); c++)
                 {
-                    temporaryPayoffs[r, c] = currentMatrix.payoffs[r, c];
+                    temporaryPayoffs[r, c] = currentMatrix.GetOnePayoff(r, c);
                 }
             }
 
-            temporaryRowStrategies[currentMatrix.rows-1] = "New Strategy";
+            temporaryRowStrategies[currentMatrix.GetRows() - 1] = "New Strategy";
 
-            for (int c = 0; c < currentMatrix.cols; c++)
+            for (int c = 0; c < currentMatrix.GetCols(); c++)
             {
-                temporaryPayoffs[currentMatrix.rows-1, c] = "empty payoff";
+                temporaryPayoffs[currentMatrix.GetRows() - 1, c] = "empty payoff";
             }
 
-            currentMatrix.RowStrategies = temporaryRowStrategies;
-            currentMatrix.payoffs = temporaryPayoffs;
+            currentMatrix.SetRowStrategies(temporaryRowStrategies);
+            currentMatrix.SetPayoffs(temporaryPayoffs);
             DisplayMatrix(currentMatrix);
         }
         private void DeleteRow_Click(object sender, EventArgs e)
         {
-            if (currentMatrix.rows <= 1)
+            if (currentMatrix.GetRows() <= 1)
             {
                 MessageBox.Show("Cannot have fewer than 1 strategy.");
                 return;
             }
             SaveBeforeEdit();
-            currentMatrix.rows -= 1;
-            string[,] temporaryPayoffs = new string[currentMatrix.rows, currentMatrix.cols];
-            string[] temporaryRowStrategies = new string[currentMatrix.rows];
-            MatrixBlueprint[0, 2].Value = currentMatrix.Players[0];
-            for (int r = 0; r < currentMatrix.rows; r++)
+            currentMatrix.ChangeRows(-1);
+            string[,] temporaryPayoffs = new string[currentMatrix.GetRows(), currentMatrix.GetCols()];
+            string[] temporaryRowStrategies = new string[currentMatrix.GetRows()];
+            MatrixBlueprint[0, 2].Value = currentMatrix.GetOnePlayer(0);
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                temporaryRowStrategies[r] = currentMatrix.RowStrategies[r];
+                temporaryRowStrategies[r] = currentMatrix.GetOneRowStrategy(r);
             }
-            for (int r = 0; r < currentMatrix.rows; r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                for (int c = 0; c < currentMatrix.cols; c++)
+                for (int c = 0; c < currentMatrix.GetCols(); c++)
                 {
-                    temporaryPayoffs[r, c] = currentMatrix.payoffs[r, c];
+                    temporaryPayoffs[r, c] = currentMatrix.GetOnePayoff(r, c);
                 }
             }
-            currentMatrix.RowStrategies = temporaryRowStrategies;
-            currentMatrix.payoffs = temporaryPayoffs;
+            currentMatrix.SetRowStrategies(temporaryRowStrategies);
+            currentMatrix.SetPayoffs(temporaryPayoffs);
             DisplayMatrix(currentMatrix);
         }
 
         private void AddColumn_Click(object sender, EventArgs e)
         {
             SaveBeforeEdit();
-            currentMatrix.cols += 1;
-            string[,] temporaryPayoffs = new string[currentMatrix.rows, currentMatrix.cols];
-            string[] temporaryColStrategies = new string[currentMatrix.cols];
-            for (int c = 0; c < currentMatrix.cols - 1; c++)
+            currentMatrix.ChangeCols(1);
+            string[,] temporaryPayoffs = new string[currentMatrix.GetRows(), currentMatrix.GetCols()];
+            string[] temporaryColStrategies = new string[currentMatrix.GetCols()];
+            for (int c = 0; c < currentMatrix.GetCols() - 1; c++)
             {
-                temporaryColStrategies[c] = currentMatrix.ColStrategies[c];
+                temporaryColStrategies[c] = currentMatrix.GetOneColStrategy(c);
             }
-            for (int r = 0; r < currentMatrix.rows; r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                for (int c = 0; c < currentMatrix.cols - 1; c++)
+                for (int c = 0; c < currentMatrix.GetCols() - 1; c++)
                 {
-                    temporaryPayoffs[r, c] = currentMatrix.payoffs[r, c];
+                    temporaryPayoffs[r, c] = currentMatrix.GetOnePayoff(r, c);
                 }
             }
-            temporaryColStrategies[currentMatrix.cols - 1] = "New Strategy";
-            for (int r = 0; r < currentMatrix.rows; r++)
+            temporaryColStrategies[currentMatrix.GetCols() - 1] = "New Strategy";
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                temporaryPayoffs[r, currentMatrix.cols - 1] = "empty payoff";
+                temporaryPayoffs[r, currentMatrix.GetCols() - 1] = "empty payoff";
             }
-            currentMatrix.ColStrategies = temporaryColStrategies;
-            currentMatrix.payoffs = temporaryPayoffs;
+            currentMatrix.SetColStrategies(temporaryColStrategies);
+            currentMatrix.SetPayoffs(temporaryPayoffs);
             DisplayMatrix(currentMatrix);
         }
 
         private void DeleteColumn_Click(object sender, EventArgs e)
         {
-            if (currentMatrix.cols <= 1)
+            if (currentMatrix.GetCols() <= 1)
             {
                 MessageBox.Show("Cannot have fewer than 1 strategy.");
                 return;
             }
 
             SaveBeforeEdit();
-            currentMatrix.cols -= 1;
-            string[,] temporaryPayoffs = new string[currentMatrix.rows, currentMatrix.cols];
-            string[] temporaryColStrategies = new string[currentMatrix.cols];
-            for (int c = 0; c < currentMatrix.cols; c++)
+            currentMatrix.ChangeCols(-1);
+            string[,] temporaryPayoffs = new string[currentMatrix.GetRows(), currentMatrix.GetCols()];
+            string[] temporaryColStrategies = new string[currentMatrix.GetCols()];
+            for (int c = 0; c < currentMatrix.GetCols(); c++)
             {
-                temporaryColStrategies[c] = currentMatrix.ColStrategies[c];
+                temporaryColStrategies[c] = currentMatrix.GetOneColStrategy(c);
             }
-            for (int r = 0; r < currentMatrix.rows; r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
-                for (int c = 0; c < currentMatrix.cols; c++)
+                for (int c = 0; c < currentMatrix.GetCols(); c++)
                 {
-                    temporaryPayoffs[r, c] = currentMatrix.payoffs[r, c];
+                    temporaryPayoffs[r, c] = currentMatrix.GetOnePayoff(r, c);
                 }
             }
-            currentMatrix.ColStrategies = temporaryColStrategies;
-            currentMatrix.payoffs = temporaryPayoffs;
+            currentMatrix.SetColStrategies(temporaryColStrategies);
+            currentMatrix.SetPayoffs(temporaryPayoffs);
             DisplayMatrix(currentMatrix);
         }
 
@@ -301,30 +301,28 @@ namespace Stochastic_Game_Theory_Calculator
         {
             Models.Matrix updatedMatrix = new Models.Matrix();
             
-            updatedMatrix.cols = originalMatrix.cols;
-            updatedMatrix.rows = originalMatrix.rows;
+            updatedMatrix.SetCols(originalMatrix.GetCols());
+            updatedMatrix.SetRows(originalMatrix.GetRows());
 
-            updatedMatrix.X = originalMatrix.X;
-            updatedMatrix.Y = originalMatrix.Y;
+            updatedMatrix.SetX(originalMatrix.GetX());
+            updatedMatrix.SetY(originalMatrix.GetY());
 
-            updatedMatrix.MatrixID = originalMatrix.MatrixID;
+            updatedMatrix.SetMatrixID(originalMatrix.GetMatrixID());
 
-            updatedMatrix.payoffs = (string[,])originalMatrix.payoffs.Clone();
+            updatedMatrix.SetPayoffs(originalMatrix.GetPayoffs());
 
-            updatedMatrix.Players = (string[])originalMatrix.Players.Clone();
+            updatedMatrix.SetPlayers(originalMatrix.GetPlayers());
 
-            updatedMatrix.RowStrategies = (string[])originalMatrix.RowStrategies.Clone();
+            updatedMatrix.SetRowStrategies(originalMatrix.GetRowStrategies());
 
-            updatedMatrix.ColStrategies = (string[])originalMatrix.ColStrategies.Clone();
+            updatedMatrix.SetColStrategies(originalMatrix.GetColStrategies());
 
-            updatedMatrix.Name = originalMatrix.Name;
+            updatedMatrix.SetName(originalMatrix.GetName());
 
-            updatedMatrix.VersionsStack = originalMatrix.VersionsStack;
+            updatedMatrix.SetVersionStack(originalMatrix.GetVersionStack());
 
             return updatedMatrix;
         }
-
-       
 
         private void DeleteMatrixButton_Click(object sender, EventArgs e)
         {
@@ -339,9 +337,9 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void saved_back_Click(object sender, EventArgs e)
         {
-            if (currentMatrix.VersionsStack.Count > 1)
+            if (currentMatrix.GetVersionStack().Count > 1)
             {
-                currentMatrix = copyMatrix(currentMatrix.VersionsStack.Pop());
+                currentMatrix = copyMatrix(currentMatrix.PopVersionStack());
             }
             else
             {

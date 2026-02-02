@@ -31,7 +31,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         int CellBuffer = 5;
 
-        public bool editingMatrix;
+        public bool EditingMatrix;
 
         private float zoomDelta = 0.9f;
         private PointF zoomFocus = new PointF(0, 0);
@@ -56,6 +56,7 @@ namespace Stochastic_Game_Theory_Calculator
         private void Form1_Load(object sender, EventArgs e)
         {
             savedMaticies = new Models.Matrix[999999];
+            
         }
 
         // This subroutine will handle the initialisation of a new matrix
@@ -65,7 +66,7 @@ namespace Stochastic_Game_Theory_Calculator
             {
                 currentMatrix = new Models.Matrix();
                 currentMatrix = currentMatrix.defaultMatrix();
-                currentMatrix.MatrixID = matrixID;
+                currentMatrix.SetMatrixID(matrixID);
                 matrixID++;
                 editMatrix();
             }
@@ -74,9 +75,6 @@ namespace Stochastic_Game_Theory_Calculator
         public void localise_matrix(Models.Matrix matrix)
         {
             bool positionVerified = false;
-
-            matrix.X = 150;
-            matrix.Y = 80;
 
             using (Graphics g = this.CreateGraphics())
             {
@@ -87,22 +85,22 @@ namespace Stochastic_Game_Theory_Calculator
                     positionVerified = true;
 
 
-                    matrix.hitbox = MatrixBounds(matrix, g);
+                    matrix.SetHitbox(MatrixBounds(matrix, g));
 
 
                     for (int i = 0; i < matrixID; i++)
                     {
-                        if (savedMaticies[i] == null || savedMaticies[i].MatrixID == matrix.MatrixID)
+                        if (savedMaticies[i] == null || savedMaticies[i].GetMatrixID() == matrix.GetMatrixID())
                         {
                             continue;
                         }
                         else if (savedMaticies[i] != null)
                         {
-                            if (matrix.hitbox.IntersectsWith(savedMaticies[i].hitbox))
+                            if (matrix.GetHitbox().IntersectsWith(savedMaticies[i].GetHitbox()))
                             {
                                 positionVerified = false;
-                                matrix.X += 20;
-                                matrix.Y += 20;
+                                matrix.ChangeX(20);
+                                matrix.ChangeY(20);
                                 break;
                             }
                         }
@@ -116,17 +114,17 @@ namespace Stochastic_Game_Theory_Calculator
 
         public void editMatrix()
         {
-            editingMatrix = true;
+            EditingMatrix = true;
             MatrixModification MM = new MatrixModification();
             MM.recieveMatrix(currentMatrix);
             MM.ShowDialog();
 
-            while (editingMatrix)
+            while (EditingMatrix)
             {
+                EditingMatrix = false;
                 if (MM.deleted)
                 {
-                    savedMaticies[currentMatrix.MatrixID] = null;
-                    editingMatrix = false;
+                    savedMaticies[currentMatrix.GetMatrixID()] = null;
                 }
                 else if (MM.isSaved)
                 {
@@ -134,12 +132,12 @@ namespace Stochastic_Game_Theory_Calculator
                     {
                         currentMatrix = MM.currentMatrix;
                         localise_matrix(currentMatrix);
-                        savedMaticies[currentMatrix.MatrixID] = MM.currentMatrix;
-                        editingMatrix = false;
+                        savedMaticies[currentMatrix.GetMatrixID()] = MM.currentMatrix;
                     }
                     else
                     {
                         MM.ShowDialog();
+                        EditingMatrix = true;
                     }
                 }
             }
@@ -165,8 +163,8 @@ namespace Stochastic_Game_Theory_Calculator
                 PointF worldMouseCoord = screenToWorldTranslate(e.Location);
 
                 //new matrix position
-                savedMaticies[movingMatrixID].X = worldMouseCoord.X - selectPoint.X;
-                savedMaticies[movingMatrixID].Y = worldMouseCoord.Y - selectPoint.Y;
+                savedMaticies[movingMatrixID].SetX(worldMouseCoord.X - selectPoint.X);
+                savedMaticies[movingMatrixID].SetY(worldMouseCoord.Y - selectPoint.Y);
 
                 Canvas.Invalidate();
             }
@@ -187,7 +185,7 @@ namespace Stochastic_Game_Theory_Calculator
 
                 using (Graphics g = this.CreateGraphics())
                 {
-                    savedMaticies[movingMatrixID].hitbox = MatrixBounds(savedMaticies[movingMatrixID], g);
+                    savedMaticies[movingMatrixID].SetHitbox(MatrixBounds(savedMaticies[movingMatrixID], g));
 
                     for (int i = 0; i < matrixID; i++)
                     {
@@ -201,9 +199,9 @@ namespace Stochastic_Game_Theory_Calculator
                         {
                             //get the dymentions of the matrix that is being compared with
 
-                            savedMaticies[i].hitbox = MatrixBounds(savedMaticies[i], g);
+                            savedMaticies[i].SetHitbox(MatrixBounds(savedMaticies[i], g));
 
-                            if (savedMaticies[i].hitbox.IntersectsWith(savedMaticies[movingMatrixID].hitbox))
+                            if (savedMaticies[i].GetHitbox().IntersectsWith(savedMaticies[movingMatrixID].GetHitbox()))
                             {
                                 collision = true;
                                 break;
@@ -216,8 +214,8 @@ namespace Stochastic_Game_Theory_Calculator
 
                 if (collision)
                 {
-                    savedMaticies[movingMatrixID].X = startingPosition.X;
-                    savedMaticies[movingMatrixID].Y = startingPosition.Y;
+                    savedMaticies[movingMatrixID].SetX(startingPosition.X);
+                    savedMaticies[movingMatrixID].SetY(startingPosition.Y);
                     MessageBox.Show("Matrices cannot overlap");
                 }
 
@@ -240,11 +238,11 @@ namespace Stochastic_Game_Theory_Calculator
                     Models.Matrix matrix = savedMaticies[i];
                     if (matrix != null)
                     {
-                        matrix.hitbox = MatrixBounds(matrix, g);
+                        matrix.SetHitbox(MatrixBounds(matrix, g));
 
                         //if matrix is clicked on with the right nouse button it is set as a current matrix.
                         //if its being selected for solving, it will skip editing and will finish selection
-                        if (e.Button == MouseButtons.Right && matrix.hitbox.Contains(worldMouseLocation))
+                        if (e.Button == MouseButtons.Right && matrix.GetHitbox().Contains(worldMouseLocation))
                         {
                             currentMatrix = matrix;
                             if (!matrixSelection)
@@ -259,14 +257,14 @@ namespace Stochastic_Game_Theory_Calculator
                             break;
 
                         }
-                        else if (matrix.hitbox.Contains(worldMouseLocation))
+                        else if (matrix.GetHitbox().Contains(worldMouseLocation))
                         {
                             movingMatrixID = i;
                             isDragged = true;
 
-                            selectPoint = new PointF(worldMouseLocation.X - matrix.X, worldMouseLocation.Y - matrix.Y);
+                            selectPoint = new PointF(worldMouseLocation.X - matrix.GetX(), worldMouseLocation.Y - matrix.GetY());
 
-                            startingPosition = new PointF(matrix.X, matrix.Y);
+                            startingPosition = new PointF(matrix.GetX(), matrix.GetY());
 
                             break;
                         }
@@ -300,7 +298,7 @@ namespace Stochastic_Game_Theory_Calculator
         private float LongestCol(Models.Matrix matrix, Graphics g)
         {
             float maxWidth = 0;
-            foreach (string s in matrix.ColStrategies)
+            foreach (string s in matrix.GetColStrategies())
             {
                 SizeF size = g.MeasureString(s, text_font);
                 if (size.Width > maxWidth)
@@ -309,11 +307,11 @@ namespace Stochastic_Game_Theory_Calculator
                 }
             }
 
-            for (int r = 0; r < matrix.rows; r++)
+            for (int r = 0; r < matrix.GetRows(); r++)
             {
-                for (int c = 0; c < matrix.cols; c++)
+                for (int c = 0; c < matrix.GetCols(); c++)
                 {
-                    string text = matrix.payoffs[r, c];
+                    string text = matrix.GetOnePayoff(r, c);
 
                     SizeF size = g.MeasureString(text, payoff_font);
                     if (size.Width > maxWidth)
@@ -341,11 +339,11 @@ namespace Stochastic_Game_Theory_Calculator
             float cellWidth = Math.Max(100, contentWidth + (CellBuffer * 2));
 
             //find dimentions of the grid of the matrix
-            float gridW = matrix.cols * cellWidth;
-            float gridH = matrix.rows * cellHight;
+            float gridW = matrix.GetCols() * cellWidth;
+            float gridH = matrix.GetRows() * cellHight;
             
             //initialise the matrix rectangle, fill it with white background and draw the external bounds
-            RectangleF currentGrid = new RectangleF(matrix.X + cellWidth, matrix.Y + cellHight, gridW, gridH);
+            RectangleF currentGrid = new RectangleF(matrix.GetX() + cellWidth, matrix.GetY() + cellHight, gridW, gridH);
             g.FillRectangle(Brushes.White, currentGrid);
             g.DrawRectangle(Pens.Black, currentGrid.X, currentGrid.Y, currentGrid.Width, currentGrid.Height);
 
@@ -354,29 +352,29 @@ namespace Stochastic_Game_Theory_Calculator
             using (StringFormat format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
             {
                 //Draw the player names and the name of the game
-                g.DrawString(matrix.Players[0], player_font, Brushes.Black, new PointF(matrix.X - (g.MeasureString(matrix.Players[0], player_font).Width / 2) - CellBuffer, matrix.Y + cellHight + (gridH / 2)), format); // I couldnt work out how to allign the name vertically as it cept on clashing with strategies so I asked Gemeni for a robust maths that ensures perfect allignment 
-                g.DrawString(matrix.Players[1], player_font, Brushes.Black, new PointF(matrix.X + cellWidth + (gridW / 2), matrix.Y - 10), format);
-                g.DrawString(matrix.Name, name_font, Brushes.Black, new PointF(matrix.X,matrix.Y), format);
+                g.DrawString(matrix.GetOnePlayer(0), player_font, Brushes.Black, new PointF(matrix.GetX() - (g.MeasureString(matrix.GetOnePlayer(0), player_font).Width / 2) - CellBuffer, matrix.GetY() + cellHight + (gridH / 2)), format); // I couldnt work out how to allign the name vertically as it cept on clashing with strategies so I asked Gemeni for a robust maths that ensures perfect allignment 
+                g.DrawString(matrix.GetOnePlayer(1), player_font, Brushes.Black, new PointF(matrix.GetX() + cellWidth + (gridW / 2), matrix.GetY() - 10), format);
+                g.DrawString(matrix.GetName(), name_font, Brushes.Black, new PointF(matrix.GetX(),matrix.GetY()), format);
 
-                for (int r = 0; r < matrix.rows; r++)
+                for (int r = 0; r < matrix.GetRows(); r++)
                 {
-                    float rowYcord = matrix.Y + cellHight + (r * cellHight);
-                    RectangleF rowStrategies = new RectangleF((matrix.X)-CellBuffer, rowYcord, cellWidth, cellHight);
-                    g.DrawString(matrix.RowStrategies[r], text_font, Brushes.Black, rowStrategies, format);
+                    float rowYcord = matrix.GetY() + cellHight + (r * cellHight);
+                    RectangleF rowStrategies = new RectangleF((matrix.GetX())-CellBuffer, rowYcord, cellWidth, cellHight);
+                    g.DrawString(matrix.GetOneRowStrategy(r), text_font, Brushes.Black, rowStrategies, format);
 
-                    for (int c = 0; c < matrix.cols; c++)
+                    for (int c = 0; c < matrix.GetCols(); c++)
                     {
-                        float colXcrd = matrix.X + cellWidth + (c * cellWidth);
+                        float colXcrd = matrix.GetX() + cellWidth + (c * cellWidth);
 
                         if (r == 0)
                         {
-                            RectangleF colHeaderRect = new RectangleF(colXcrd, matrix.Y, cellWidth, cellHight);
-                            g.DrawString(matrix.ColStrategies[c], text_font, Brushes.Black, colHeaderRect, format);
+                            RectangleF colHeaderRect = new RectangleF(colXcrd, matrix.GetY(), cellWidth, cellHight);
+                            g.DrawString(matrix.GetOneColStrategy(c), text_font, Brushes.Black, colHeaderRect, format);
                         }
                         g.DrawRectangle(gridPen, colXcrd, rowYcord, cellWidth, cellHight);
 
                         RectangleF cellPic = new RectangleF(colXcrd, rowYcord, cellWidth, cellHight);
-                        g.DrawString(matrix.payoffs[r, c], payoff_font, Brushes.Black, cellPic, format);
+                        g.DrawString(matrix.GetOnePayoff(r, c), payoff_font, Brushes.Black, cellPic, format);
                     }
                 }
             }
@@ -436,11 +434,11 @@ namespace Stochastic_Game_Theory_Calculator
 
             float cellWidth = Math.Max(cellHight, LongestCol(matrix, g) + CellBuffer);
 
-            float totalWidth = (matrix.cols * cellWidth) + cellWidth;
+            float totalWidth = (matrix.GetCols() * cellWidth) + cellWidth;
 
-            float totalHeight = (matrix.rows * cellHight) + cellHight;
+            float totalHeight = (matrix.GetRows() * cellHight) + cellHight;
 
-            return new RectangleF(matrix.X, matrix.Y, totalWidth + 30f, totalHeight+30f);
+            return new RectangleF(matrix.GetX(), matrix.GetY(), totalWidth + 30f, totalHeight+30f);
         }
 
         private void SimulationInitialise_Click(object sender, EventArgs e)
@@ -518,23 +516,23 @@ namespace Stochastic_Game_Theory_Calculator
         public void BestResponceEnumeration()
         {
             //I have asked Chat GPT what would be the best algorithm to solve pure strategy normal form games, I was originally considering IESDS but it only finds nash equalibria that is in the strictly dominant strategies. Although it it more time efficient, i chose BRE because is finds all equalibria
-            MessageBox.Show(currentMatrix.Name + " will now be solved via the Best Responce Enumeration Algorithm");
+            MessageBox.Show(currentMatrix.GetName() + " will now be solved via the Best Responce Enumeration Algorithm");
 
             //prepare data for comparison, i need some way of marking cells in rows and columns as best responces in order to compare them later to find the intersection and also do maths with them
 
-            bool[,] Player1BestResponses = new bool[currentMatrix.rows, currentMatrix.cols];
-            bool[,] Player2BestResponses = new bool[currentMatrix.rows, currentMatrix.cols];
+            bool[,] Player1BestResponses = new bool[currentMatrix.GetRows(), currentMatrix.GetCols()];
+            bool[,] Player2BestResponses = new bool[currentMatrix.GetRows(), currentMatrix.GetCols()];
 
-            float[,] Player1Payoffs = new float[currentMatrix.rows, currentMatrix.cols];
-            float[,] Player2Payoffs = new float[currentMatrix.rows, currentMatrix.cols];
+            float[,] Player1Payoffs = new float[currentMatrix.GetRows(), currentMatrix.GetCols()];
+            float[,] Player2Payoffs = new float[currentMatrix.GetRows(), currentMatrix.GetCols()];
 
             //Player 1 analysis
             //Convert payoffs stored as string into float in order to run math with them
-            for (int row = 0; row < currentMatrix.rows; row++)
+            for (int row = 0; row < currentMatrix.GetRows(); row++)
                 {
-                    for (int column = 0; column < currentMatrix.cols; column++)
+                    for (int column = 0; column < currentMatrix.GetCols(); column++)
                     {
-                        string stringPayoff = currentMatrix.payoffs[row, column];
+                        string stringPayoff = currentMatrix.GetOnePayoff(row, column);
                         string[] parts = stringPayoff.Split(':');
 
                     Player1Payoffs[row, column] = float.Parse(parts[0]);
@@ -545,11 +543,11 @@ namespace Stochastic_Game_Theory_Calculator
             // now actual logic of the algorithm 
 
                 //fix the column for player 2
-                for (int col = 0; col < currentMatrix.cols; col++)
+                for (int col = 0; col < currentMatrix.GetCols(); col++)
                 {
                     //finds the payoff for player 1 for a currently fixed column
                     float maxPlayer1 = -999999999999999999; //assume the current payoff for player1 is as bad as bossible as so in the first comparsion the first payoff will always be better not matter how bad it is
-                    for (int row = 0; row < currentMatrix.rows; row++)
+                    for (int row = 0; row < currentMatrix.GetRows(); row++)
                     {
                         if (Player1Payoffs[row, col] > maxPlayer1)
                         {
@@ -558,7 +556,7 @@ namespace Stochastic_Game_Theory_Calculator
                     }
 
                     //Highlight each cell with the max payoff for a given cell
-                    for (int row = 0; row < currentMatrix.rows; row++)
+                    for (int row = 0; row < currentMatrix.GetRows(); row++)
                     {
                         if (Player1Payoffs[row, col] == maxPlayer1)
                         {
@@ -569,11 +567,11 @@ namespace Stochastic_Game_Theory_Calculator
 
                 ///Player 2 analysis
                 //fix a row
-                for (int row = 0; row < currentMatrix.rows; row++)
+                for (int row = 0; row < currentMatrix.GetRows(); row++)
                 {
                     //compare possible payoffs
                     float maxPlayer2 = -999999999999999999;
-                    for (int columns = 0; columns < currentMatrix.cols; columns++)
+                    for (int columns = 0; columns < currentMatrix.GetCols(); columns++)
                     {
                         if (Player2Payoffs[row, columns] > maxPlayer2)
                         {
@@ -582,7 +580,7 @@ namespace Stochastic_Game_Theory_Calculator
                     }
 
                     //highlight every payoff-maximising cell per given row for player 2
-                    for (int c = 0; c < currentMatrix.cols; c++)
+                    for (int c = 0; c < currentMatrix.GetCols(); c++)
                     {
                         if (Player2Payoffs[row, c] == maxPlayer2)
                         {
@@ -595,14 +593,14 @@ namespace Stochastic_Game_Theory_Calculator
 
                 List<string> NashEqualibria = new List<string>(); //tenporary output
 
-                for (int r = 0; r < currentMatrix.rows; r++)
+                for (int r = 0; r < currentMatrix.GetRows(); r++)
                 {
-                    for (int c = 0; c < currentMatrix.cols; c++)
+                    for (int c = 0; c < currentMatrix.GetCols(); c++)
                     {
                         // if both cells are true, they intersect
                         if (Player1BestResponses[r, c] && Player2BestResponses[r, c])
                         {
-                            NashEqualibria.Add($"{currentMatrix.Players[0]} chooses {currentMatrix.RowStrategies[r]}\n{currentMatrix.Players[1]} chooses {currentMatrix.ColStrategies[r]}\nThe payoffs are: {currentMatrix.payoffs[r, c]}");
+                            NashEqualibria.Add($"{currentMatrix.GetOnePlayer(0)} chooses {currentMatrix.GetOneRowStrategy(r)}\n{currentMatrix.GetOnePlayer(1)} chooses {currentMatrix.GetOneColStrategy(r)}\nThe payoffs are: {currentMatrix.GetOnePayoff(r, c)}");
                         }
                     }
                 }
@@ -610,7 +608,7 @@ namespace Stochastic_Game_Theory_Calculator
                 //return results
                 if (NashEqualibria.Count > 0)
                 {
-                    string outputString = "Pure Strategy Nash Equilibria in "+currentMatrix.Name+" are:\n\n";
+                    string outputString = "Pure Strategy Nash Equilibria in "+currentMatrix.GetName() + " are:\n\n";
                     foreach (string val in NashEqualibria)
                     {
                         outputString += val + "\n\n";
@@ -619,7 +617,7 @@ namespace Stochastic_Game_Theory_Calculator
                 }
                 else
                 {
-                    MessageBox.Show("In "+ currentMatrix.Name + " no Pure Strategy Nash Equilibrium exists.", "Output");
+                    MessageBox.Show("In "+ currentMatrix.GetName() + " no Pure Strategy Nash Equilibrium exists.", "Output");
                 }
 
         }
