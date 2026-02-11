@@ -21,6 +21,7 @@ namespace Stochastic_Game_Theory_Calculator
         public Models.Matrix currentMatrix = new Models.Matrix();
         public bool isSaved = false;
         public bool deleted = false;
+        private string[] splitPayoff;
 
         public void recieveMatrix(Models.Matrix matrix)
         {
@@ -59,7 +60,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         public bool VerifyPayofsFloat()
         {
-            string[] splitPayoff = null;
+            splitPayoff = null;
 
             for(int r = 0; r < currentMatrix.GetRows(); r++)
             {
@@ -127,6 +128,7 @@ namespace Stochastic_Game_Theory_Calculator
             {
                 currentMatrix.SetOneRowStrategy(r, MatrixBlueprint[1, r + 2].Value.ToString());
             }
+
             currentMatrix.SetOnePlayer(0,MatrixBlueprint[0, 2].Value.ToString());
             currentMatrix.SetOnePlayer(1,MatrixBlueprint[2, 0].Value.ToString());
             currentMatrix.SetName(MatrixBlueprint[0,0].Value.ToString());
@@ -135,6 +137,21 @@ namespace Stochastic_Game_Theory_Calculator
         public void DisplayMatrix(Models.Matrix matrix)
         {
             currentMatrix = matrix;
+
+            UpdateMatrixBlueprintProperties();
+
+            DrawGridMatrixBluuprint();
+
+
+            FillCellsBlueprint();
+
+            DrawStrategies();
+
+            AccesabilityLimit();
+        }
+
+        private void UpdateMatrixBlueprintProperties()
+        {
             MatrixBlueprint.RowCount = currentMatrix.GetRows() + 2;
             MatrixBlueprint.ColumnCount = currentMatrix.GetCols() + 2;
 
@@ -142,50 +159,57 @@ namespace Stochastic_Game_Theory_Calculator
             MatrixBlueprint.RowHeadersVisible = false;
 
             MatrixBlueprint.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        }
 
+        private void DrawGridMatrixBluuprint()
+        {
             for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
                 if (r > 0)
                 {
                     MatrixBlueprint[0, r + 2].Value = "";
-                    MatrixBlueprint[0, r + 2].Style.BackColor = Color.Black;
+                    MatrixBlueprint[0, r + 2].Style.BackColor = Color.LightBlue;
                 }
                 for (int c = 0; c < currentMatrix.GetCols(); c++)
                 {
                     MatrixBlueprint[c + 2, r + 2].Value = currentMatrix.GetOnePayoff(r, c);
                     if (c > 0)
                     {
-                        MatrixBlueprint[c + 2, 0].Style.BackColor = Color.Black;
+                        MatrixBlueprint[c + 2, 0].Style.BackColor = Color.LightBlue;
                     }
                 }
             }
+        }
+
+        private void FillCellsBlueprint()
+        {
             MatrixBlueprint.DefaultCellStyle.Font = new Font("Times New Roman", 14);
-            MatrixBlueprint[1, 0].Style.BackColor = Color.Black;
-            MatrixBlueprint[0, 1].Style.BackColor = Color.Black;
-            MatrixBlueprint[1, 1].Style.BackColor = Color.Black;
+            MatrixBlueprint[1, 0].Style.BackColor = Color.LightBlue;
+            MatrixBlueprint[0, 1].Style.BackColor = Color.LightBlue;
+            MatrixBlueprint[1, 1].Style.BackColor = Color.LightBlue;
             MatrixBlueprint.RowTemplate.Height = 40;
             MatrixBlueprint[0, 2].Value = currentMatrix.GetOnePlayer(0);
             MatrixBlueprint[2, 0].Value = currentMatrix.GetOnePlayer(1);
             MatrixBlueprint[0, 0].Value = currentMatrix.GetName();
+        }
 
+        private void DrawStrategies()
+        {
             for (int c = 0; c < currentMatrix.GetCols(); c++)
             {
                 MatrixBlueprint[c + 2, 1].Value = currentMatrix.GetOneColStrategy(c);
             }
 
-
-
             for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
                 MatrixBlueprint[1, r + 2].Value = currentMatrix.GetOneRowStrategy(r);
             }
-            AccesabilityLimit();
         }
-
         private void AddRow_Click(object sender, EventArgs e)
         {
             SaveBeforeEdit();
-            currentMatrix.ChangeCols(1);
+
+            currentMatrix.ChangeRows(1);
 
             string[,] temporaryPayoffs = new string[currentMatrix.GetRows(), currentMatrix.GetCols()];
             string[] temporaryRowStrategies = new string[currentMatrix.GetRows()];
