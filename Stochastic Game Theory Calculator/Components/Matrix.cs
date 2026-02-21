@@ -31,6 +31,8 @@ namespace Stochastic_Game_Theory_Calculator.Models
         private float colXcrd;
         private float colYcrd;
         private float rowXcrd;
+        private int connectionOutcomeRowIndeex;
+        private int connectionOutcomeColIndeex;
 
         private RectangleF currentGrid;
         private RectangleF rowStrategyRectangle;
@@ -429,6 +431,25 @@ namespace Stochastic_Game_Theory_Calculator.Models
             NashEqualibria.Add(output);
         }
 
+        public int GetconnectionRowIndeex()
+        {
+            return connectionOutcomeRowIndeex; 
+        }
+
+        public void SetConnectionRowIndeex(int index)
+        {
+            connectionOutcomeRowIndeex = index;
+        }
+        public int GetconnectionColIndeex()
+        {
+            return connectionOutcomeColIndeex;
+        }
+
+        public void SetConnectionColIndeex(int index)
+        {
+            connectionOutcomeColIndeex = index;
+        }
+
         public float LongestCol(Models.Matrix matrix, Graphics g, Font text_font, Font payoff_font)
         {
             float maxWidth = 0;
@@ -474,23 +495,26 @@ namespace Stochastic_Game_Theory_Calculator.Models
                 }
             }
         }
-        public Point GetCellIndicesFromPoint(PointF worldPoint)
+        public int[] IdentifyCellClicked(PointF mousePointer)
         {
-            float startX = this.GetX() + cellWidth;
-            float startY = this.GetY() + cellHeight;
+            int[] indecies = new int[2];
+            float horisontalCellBound = masterX + cellWidth;
+            float verticalCellBound = masterY + cellHeight;
 
-            if (worldPoint.X < startX || worldPoint.Y < startY) return new Point(-1, -1);
+            int colIndex = (int)((mousePointer.X - horisontalCellBound) / cellWidth);
+            int rowIndex = (int)((mousePointer.Y - verticalCellBound) / cellHeight);
 
-            int colIndex = (int)((worldPoint.X - startX) / cellWidth);
-            int rowIndex = (int)((worldPoint.Y - startY) / cellHeight);
-
-            if (rowIndex >= 0 && rowIndex < this.GetRows() &&
-                colIndex >= 0 && colIndex < this.GetCols())
+            if (rowIndex >= 0 && rowIndex < rows && colIndex >= 0 && colIndex < cols)
             {
-                return new Point(rowIndex, colIndex);
+                indecies[0] = rowIndex;
+                indecies[1] = colIndex;
+                return (indecies);
             }
 
-            return new Point(-1, -1);
+            indecies[0] = -1;
+            indecies[1] = -1;
+
+            return indecies;
         }
         public void CalculateMatrixBounds(Models.Matrix matrix, Graphics g, Font text_font, Font payoff_font)
         {
@@ -506,17 +530,40 @@ namespace Stochastic_Game_Theory_Calculator.Models
         }
 
 
-        public Matrix defaultMatrix()
+        public Matrix defaultMatrix(List<Models.Matrix> savedMatricies, int count)
         {
             string[,] defaultPayoffs = { { "3:3", "0:4" }, { "4:0", "2:2" } };
             string[] defaultRowStrategies = { "Cooperate", "Defect" };
             string[] defaultColStrategies = { "Cooperate", "Defect" };
             string[] defaultPlayers = { "Player 1", "Player 2" };
-            string defaultName = "Default Name";
+
+            foreach (Models.Matrix matrix in savedMatricies)
+            {
+                if(savedMatricies.Count == 0)
+                {
+                    break;
+                }
+                else if(matrix.GetName()== "Default Name")
+                {
+                    defaultName = "Default Name (" + count +")";
+                    break;
+                }
+                else
+                {
+                    defaultName = "Default Name";
+                    break;
+                }
+
+            }
             Stack<Matrix> defaultStack = new Stack<Matrix>();
             RectangleF defaultRectangle = new RectangleF();
             Matrix defaultMatrix = new Matrix(2, 2, defaultPayoffs, defaultRowStrategies, defaultColStrategies, defaultName, defaultStack, defaultPlayers, 150, 80, defaultRectangle);
             return defaultMatrix;
+        }
+
+        public void GiveName()
+        {
+
         }
     }
 }

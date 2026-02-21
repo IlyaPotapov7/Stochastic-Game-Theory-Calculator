@@ -9,10 +9,24 @@ namespace Stochastic_Game_Theory_Calculator.Models
     public class Connection
     {
         private List<LinkedList<Node>> connectedComponents;
+        private int connectionID;
+        Model rootModel;
 
-        public Connection()
+        public Connection(int newID)
         {
             connectedComponents = new List<LinkedList<Node>>();
+            connectionID = newID;
+            rootModel = null;
+        }
+
+        public int GetConnectionID()
+        {
+            return connectionID; 
+        }
+
+        public List<LinkedList<Node>> GetConnectedComponents()
+        {
+            return connectedComponents; 
         }
 
         public void AddConection(Model originModel, Model destinationModel, int originRow, int originCol)
@@ -97,9 +111,33 @@ namespace Stochastic_Game_Theory_Calculator.Models
                 }
             }
         }
+
+        public Model GetRootModel()
+        {
+            return rootModel;
+        }
+
+        public void SetRootModel(Model rootModel)
+        {
+            this.rootModel = rootModel;
+        }
+
+        public void RefreshRefference(Model previousVersion, Model newVersion)
+        {
+            foreach (LinkedList<Node> link in connectedComponents)
+            {
+                foreach (Node node in link)
+                {
+                    if (node.GetModelReference() == previousVersion)
+                    {
+                        node.SetModelReference(newVersion);
+                    }
+                }
+            }
+        }
     }
 
-    public class Node
+    public class Node : Model
     {
         private Model ModelReference;
         private int RowIndex;

@@ -56,7 +56,6 @@
       <DependentUpon>MatrixModification.cs</DependentUpon>
     </Compile>
     <Compile Include="Components\Connection.cs" />
-    <Compile Include="Components\Graph.cs" />
     <Compile Include="Components\Model.cs" />
     <Compile Include="Components\Matrix.cs" />
     <Compile Include="Stochastic Game Theory Calculator.cs">

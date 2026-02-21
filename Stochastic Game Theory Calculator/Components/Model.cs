@@ -13,6 +13,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
         protected string[] players;
         protected string name;
         protected int ID;
+        protected string defaultName = "Default Name";
 
         public string[] GetPlayers()
         {
