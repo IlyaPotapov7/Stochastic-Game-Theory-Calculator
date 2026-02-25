@@ -26,10 +26,9 @@
             this.MatrixInitialise = new System.Windows.Forms.Button();
             this.tutorialButton = new System.Windows.Forms.Button();
             this.ModelSelectionPannel = new System.Windows.Forms.Panel();
+            this.DeleteComponent = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.CancelSelectedCell = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.DeleteConnection = new System.Windows.Forms.Button();
             this.saveConnection = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.zoom_to_default = new System.Windows.Forms.Button();
@@ -38,7 +37,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.solveButton = new System.Windows.Forms.Button();
             this.ConnectionInitialise = new System.Windows.Forms.Button();
-            this.SimulationInitialise = new System.Windows.Forms.Button();
             this.Canvas = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.ExitMatrixSelection = new System.Windows.Forms.Button();
@@ -48,6 +46,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.DeleteEntireConnection = new System.Windows.Forms.Button();
             this.ModelSelectionPannel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.panel1.SuspendLayout();
@@ -57,10 +56,10 @@
             // 
             this.ModelSelection.AutoSize = true;
             this.ModelSelection.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ModelSelection.Location = new System.Drawing.Point(40, 107);
+            this.ModelSelection.Location = new System.Drawing.Point(102, 107);
             this.ModelSelection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ModelSelection.Name = "ModelSelection";
-            this.ModelSelection.Size = new System.Drawing.Size(261, 42);
+            this.ModelSelection.Size = new System.Drawing.Size(135, 22);
             this.ModelSelection.TabIndex = 2;
             this.ModelSelection.Text = "Model Asembly";
             // 
@@ -69,7 +68,7 @@
             this.MatrixInitialise.AutoSize = true;
             this.MatrixInitialise.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.MatrixInitialise.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.MatrixInitialise.Location = new System.Drawing.Point(86, 192);
+            this.MatrixInitialise.Location = new System.Drawing.Point(82, 203);
             this.MatrixInitialise.Name = "MatrixInitialise";
             this.MatrixInitialise.Size = new System.Drawing.Size(172, 49);
             this.MatrixInitialise.TabIndex = 3;
@@ -94,10 +93,10 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.ModelSelectionPannel.AutoScrollMargin = new System.Drawing.Size(50, 60);
             this.ModelSelectionPannel.BackColor = System.Drawing.SystemColors.Window;
+            this.ModelSelectionPannel.Controls.Add(this.DeleteEntireConnection);
+            this.ModelSelectionPannel.Controls.Add(this.DeleteComponent);
             this.ModelSelectionPannel.Controls.Add(this.button2);
             this.ModelSelectionPannel.Controls.Add(this.CancelSelectedCell);
-            this.ModelSelectionPannel.Controls.Add(this.button1);
-            this.ModelSelectionPannel.Controls.Add(this.DeleteConnection);
             this.ModelSelectionPannel.Controls.Add(this.saveConnection);
             this.ModelSelectionPannel.Controls.Add(this.label2);
             this.ModelSelectionPannel.Controls.Add(this.zoom_to_default);
@@ -106,7 +105,6 @@
             this.ModelSelectionPannel.Controls.Add(this.label1);
             this.ModelSelectionPannel.Controls.Add(this.solveButton);
             this.ModelSelectionPannel.Controls.Add(this.ConnectionInitialise);
-            this.ModelSelectionPannel.Controls.Add(this.SimulationInitialise);
             this.ModelSelectionPannel.Controls.Add(this.ModelSelection);
             this.ModelSelectionPannel.Controls.Add(this.tutorialButton);
             this.ModelSelectionPannel.Controls.Add(this.MatrixInitialise);
@@ -114,6 +112,18 @@
             this.ModelSelectionPannel.Name = "ModelSelectionPannel";
             this.ModelSelectionPannel.Size = new System.Drawing.Size(345, 1106);
             this.ModelSelectionPannel.TabIndex = 5;
+            // 
+            // DeleteComponent
+            // 
+            this.DeleteComponent.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.DeleteComponent.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.DeleteComponent.Location = new System.Drawing.Point(35, 432);
+            this.DeleteComponent.Name = "DeleteComponent";
+            this.DeleteComponent.Size = new System.Drawing.Size(140, 43);
+            this.DeleteComponent.TabIndex = 26;
+            this.DeleteComponent.Text = "Delete Component";
+            this.DeleteComponent.UseVisualStyleBackColor = false;
+            this.DeleteComponent.Click += new System.EventHandler(this.DeleteComponent_Click);
             // 
             // button2
             // 
@@ -131,41 +141,19 @@
             // 
             this.CancelSelectedCell.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.CancelSelectedCell.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.CancelSelectedCell.Location = new System.Drawing.Point(125, 488);
+            this.CancelSelectedCell.Location = new System.Drawing.Point(109, 502);
             this.CancelSelectedCell.Name = "CancelSelectedCell";
-            this.CancelSelectedCell.Size = new System.Drawing.Size(97, 33);
+            this.CancelSelectedCell.Size = new System.Drawing.Size(128, 45);
             this.CancelSelectedCell.TabIndex = 24;
             this.CancelSelectedCell.Text = "Unselect";
             this.CancelSelectedCell.UseVisualStyleBackColor = false;
             this.CancelSelectedCell.Click += new System.EventHandler(this.CancelSelectedCell_Click);
             // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.button1.Location = new System.Drawing.Point(67, 423);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(92, 48);
-            this.button1.TabIndex = 23;
-            this.button1.Text = "Delete Component";
-            this.button1.UseVisualStyleBackColor = false;
-            // 
-            // DeleteConnection
-            // 
-            this.DeleteConnection.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.DeleteConnection.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.DeleteConnection.Location = new System.Drawing.Point(185, 423);
-            this.DeleteConnection.Name = "DeleteConnection";
-            this.DeleteConnection.Size = new System.Drawing.Size(90, 48);
-            this.DeleteConnection.TabIndex = 21;
-            this.DeleteConnection.Text = "Delete Connection";
-            this.DeleteConnection.UseVisualStyleBackColor = false;
-            // 
             // saveConnection
             // 
             this.saveConnection.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.saveConnection.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.saveConnection.Location = new System.Drawing.Point(185, 358);
+            this.saveConnection.Location = new System.Drawing.Point(181, 367);
             this.saveConnection.Name = "saveConnection";
             this.saveConnection.Size = new System.Drawing.Size(84, 47);
             this.saveConnection.TabIndex = 19;
@@ -177,9 +165,9 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 10.875F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(104, 302);
+            this.label2.Location = new System.Drawing.Point(130, 309);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(154, 33);
+            this.label2.Size = new System.Drawing.Size(78, 18);
             this.label2.TabIndex = 18;
             this.label2.Text = "Connection";
             // 
@@ -217,9 +205,9 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 10.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(41, 644);
+            this.label1.Location = new System.Drawing.Point(89, 647);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(274, 32);
+            this.label1.Size = new System.Drawing.Size(145, 17);
             this.label1.TabIndex = 13;
             this.label1.Text = "Canvas Coordination";
             // 
@@ -240,25 +228,13 @@
             // 
             this.ConnectionInitialise.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ConnectionInitialise.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ConnectionInitialise.Location = new System.Drawing.Point(75, 358);
+            this.ConnectionInitialise.Location = new System.Drawing.Point(71, 367);
             this.ConnectionInitialise.Name = "ConnectionInitialise";
             this.ConnectionInitialise.Size = new System.Drawing.Size(84, 47);
             this.ConnectionInitialise.TabIndex = 7;
             this.ConnectionInitialise.Text = "New";
             this.ConnectionInitialise.UseVisualStyleBackColor = false;
             this.ConnectionInitialise.Click += new System.EventHandler(this.ConnectionInitialise_Click);
-            // 
-            // SimulationInitialise
-            // 
-            this.SimulationInitialise.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.SimulationInitialise.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.SimulationInitialise.Location = new System.Drawing.Point(86, 558);
-            this.SimulationInitialise.Name = "SimulationInitialise";
-            this.SimulationInitialise.Size = new System.Drawing.Size(172, 49);
-            this.SimulationInitialise.TabIndex = 6;
-            this.SimulationInitialise.Text = "Stochastic";
-            this.SimulationInitialise.UseVisualStyleBackColor = false;
-            this.SimulationInitialise.Click += new System.EventHandler(this.SimulationInitialise_Click);
             // 
             // Canvas
             // 
@@ -293,13 +269,12 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(437, 72);
             this.panel1.TabIndex = 7;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // ExitMatrixSelection
             // 
             this.ExitMatrixSelection.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.ExitMatrixSelection.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.ExitMatrixSelection.Location = new System.Drawing.Point(85, 32);
+            this.ExitMatrixSelection.Location = new System.Drawing.Point(85, 34);
             this.ExitMatrixSelection.Name = "ExitMatrixSelection";
             this.ExitMatrixSelection.Size = new System.Drawing.Size(90, 32);
             this.ExitMatrixSelection.TabIndex = 23;
@@ -326,7 +301,7 @@
             this.ConnectionInitialiseIndicator.Font = new System.Drawing.Font("Times New Roman", 7.875F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ConnectionInitialiseIndicator.Location = new System.Drawing.Point(243, 37);
             this.ConnectionInitialiseIndicator.Name = "ConnectionInitialiseIndicator";
-            this.ConnectionInitialiseIndicator.Size = new System.Drawing.Size(25, 24);
+            this.ConnectionInitialiseIndicator.Size = new System.Drawing.Size(16, 14);
             this.ConnectionInitialiseIndicator.TabIndex = 12;
             this.ConnectionInitialiseIndicator.Text = "   ";
             this.ConnectionInitialiseIndicator.Click += new System.EventHandler(this.ConnectionInitialiseIndicator_Click);
@@ -338,7 +313,7 @@
             this.ChoosingMatrixBool.Font = new System.Drawing.Font("Times New Roman", 7.875F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ChoosingMatrixBool.Location = new System.Drawing.Point(44, 38);
             this.ChoosingMatrixBool.Name = "ChoosingMatrixBool";
-            this.ChoosingMatrixBool.Size = new System.Drawing.Size(25, 24);
+            this.ChoosingMatrixBool.Size = new System.Drawing.Size(16, 14);
             this.ChoosingMatrixBool.TabIndex = 11;
             this.ChoosingMatrixBool.Text = "   ";
             this.ChoosingMatrixBool.Click += new System.EventHandler(this.ChoosingMatrixBool_Click);
@@ -349,7 +324,7 @@
             this.label5.Font = new System.Drawing.Font("Times New Roman", 16.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.Location = new System.Drawing.Point(181, 12);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(31, 49);
+            this.label5.Size = new System.Drawing.Size(17, 25);
             this.label5.TabIndex = 10;
             this.label5.Text = "|";
             // 
@@ -359,7 +334,7 @@
             this.label3.Font = new System.Drawing.Font("Times New Roman", 7.875F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(229, 12);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(194, 24);
+            this.label3.Size = new System.Drawing.Size(105, 14);
             this.label3.TabIndex = 9;
             this.label3.Text = "Connection Selection";
             this.label3.Click += new System.EventHandler(this.label3_Click);
@@ -370,15 +345,27 @@
             this.label4.Font = new System.Drawing.Font("Times New Roman", 7.875F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(44, 12);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(139, 24);
+            this.label4.Size = new System.Drawing.Size(76, 14);
             this.label4.TabIndex = 8;
             this.label4.Text = "Choose Matrix";
             // 
+            // DeleteEntireConnection
+            // 
+            this.DeleteEntireConnection.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.DeleteEntireConnection.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.DeleteEntireConnection.Location = new System.Drawing.Point(181, 432);
+            this.DeleteEntireConnection.Name = "DeleteEntireConnection";
+            this.DeleteEntireConnection.Size = new System.Drawing.Size(143, 43);
+            this.DeleteEntireConnection.TabIndex = 22;
+            this.DeleteEntireConnection.Text = "Delete Connection";
+            this.DeleteEntireConnection.UseVisualStyleBackColor = false;
+            this.DeleteEntireConnection.Click += new System.EventHandler(this.DeleteEntireConnection_Click);
+            // 
             // mainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 28F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1643, 1130);
+            this.ClientSize = new System.Drawing.Size(1643, 1061);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.Canvas);
             this.Controls.Add(this.ModelSelectionPannel);
@@ -407,13 +394,11 @@
         private System.Windows.Forms.Panel ModelSelectionPannel;
         private System.Windows.Forms.PictureBox Canvas;
         private System.Windows.Forms.Button ConnectionInitialise;
-        private System.Windows.Forms.Button SimulationInitialise;
         private System.Windows.Forms.Button solveButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button return_to_origin;
         private System.Windows.Forms.Button lockalise_matricies;
         private System.Windows.Forms.Button zoom_to_default;
-        private System.Windows.Forms.Button DeleteConnection;
         private System.Windows.Forms.Button saveConnection;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
@@ -421,12 +406,13 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label ChoosingMatrixBool;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label ConnectionInitialiseIndicator;
         private System.Windows.Forms.Button ExitMatrixSelection;
         private System.Windows.Forms.Button ExitConnectionSelection;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button CancelSelectedCell;
+        private System.Windows.Forms.Button DeleteComponent;
+        private System.Windows.Forms.Button DeleteEntireConnection;
     }
 }
 

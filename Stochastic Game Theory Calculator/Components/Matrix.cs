@@ -518,14 +518,10 @@ namespace Stochastic_Game_Theory_Calculator.Models
         }
         public void CalculateMatrixBounds(Models.Matrix matrix, Graphics g, Font text_font, Font payoff_font)
         {
-            float cellHight = 60;
-
-            float cellWidth = Math.Max(cellHight, LongestCol(matrix, g, text_font, payoff_font) + cellBuffer);
-
-            float totalWidth = (matrix.GetCols() * cellWidth) + cellWidth;
-
-            float totalHeight = (matrix.GetRows() * cellHight) + cellHight;
-
+            float currentCellHeight = matrix.GetCellHeight();
+            float currentCellWidth = matrix.DetermineCellWidth(g, matrix, text_font, payoff_font);
+            float totalWidth = (matrix.GetCols() * currentCellWidth) + currentCellWidth;
+            float totalHeight = (matrix.GetRows() * currentCellHeight) + currentCellHeight;
             hitbox = new RectangleF(matrix.GetX(), matrix.GetY(), totalWidth + 30f, totalHeight + 30f);
         }
 

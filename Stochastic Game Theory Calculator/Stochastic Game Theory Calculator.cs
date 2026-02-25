@@ -28,7 +28,6 @@ namespace Stochastic_Game_Theory_Calculator
         public int newModelID = 0;
         private int currentSimulations;
         private int newConnectionID;
-        private bool connectionSelection;
         private Node originNode;
         private Node currentNode;
         private Models.Matrix destinationMatrix;
@@ -51,12 +50,16 @@ namespace Stochastic_Game_Theory_Calculator
         private PointF previousPoint;
         private PointF worldMouseCoord;
 
+        private bool connectionSelection;
         private bool panning = false;
         private bool matrixSelection = false;
         private bool EditingMatrix;
         private bool positionVerified;
         private bool collision;
         private bool isDragged = false;
+        private bool chossingPayoffToDeleteConnection = false;
+        private bool chossingMatrixToDeleteConnection = false;
+        private bool choosingMatrixToDeleteEntireConnection = false;
 
         public mainWindow()
         {
@@ -290,12 +293,10 @@ namespace Stochastic_Game_Theory_Calculator
                     {
                         matrix.CalculateMatrixBounds(matrix, g, text_font, payoff_font);
 
-                        //if matrix is clicked on with the right nouse button it is set as a current matrix.
-                        //if its being selected for solving, it will skip editing and will finish selection
                         if (e.Button == MouseButtons.Right && matrix.GetHitbox().Contains(worldMouseCoord))
                         {
 
-                            if (!matrixSelection && !connectionSelection)
+                            if (!matrixSelection && !connectionSelection && !chossingPayoffToDeleteConnection && !chossingMatrixToDeleteConnection && !choosingMatrixToDeleteEntireConnection)
                             {
                                 editMatrix(matrix);
                             }
@@ -309,7 +310,30 @@ namespace Stochastic_Game_Theory_Calculator
                                 BestResponceEnumeration(matrix);
                                 ChoosingMatrixBool.BackColor = Color.White;
                             }
-                            break;
+                            else if(chossingPayoffToDeleteConnection)
+                            {
+                            
+                                        int[] cellIndex = matrix.IdentifyCellClicked(worldMouseCoord);
+                                        originNode = new Node(matrix, cellIndex[0], cellIndex[1]);
+
+                                        chossingPayoffToDeleteConnection = false;
+                                        chossingMatrixToDeleteConnection = true;
+
+                                        MessageBox.Show($"Payoff selected: [{matrix.GetOnePayoff(cellIndex[0], cellIndex[1])}] from [{matrix.GetName()}]. Please select the destination matrix.");
+                                
+                            }
+                            else if(chossingMatrixToDeleteConnection)
+                            {
+                                destinationMatrix = matrix;
+                                chossingMatrixToDeleteConnection = false;
+                                ComponentDeletion((Models.Matrix)originNode.GetModelReference(), originNode.GetRowIndex(), originNode.GetColIndex(), destinationMatrix);
+                            }
+                            else if(choosingMatrixToDeleteEntireConnection)
+                            {
+                                choosingMatrixToDeleteEntireConnection = false;
+                                DeleteAllNodes(matrix);
+                            }
+                                break;
 
                         }
                         else if (matrix.GetHitbox().Contains(worldMouseCoord))
@@ -364,7 +388,7 @@ namespace Stochastic_Game_Theory_Calculator
                     {
 
                         currentModel = (Models.Matrix)currentConnection.GetRootModel();
-                        currentConnection.AddConection(currentConnection.GetRootModel(), model, model.GetconnectionRowIndeex(), currentModel.GetconnectionColIndeex());
+                        currentConnection.AddConection(currentModel, model, currentModel.GetconnectionRowIndeex(), currentModel.GetconnectionColIndeex());
                         currentConnection.SetRootModel(null);
                         Canvas.Invalidate();
                     }
@@ -753,7 +777,7 @@ namespace Stochastic_Game_Theory_Calculator
             for (int row = 0; row < matrix.GetRows(); row++)
             {
                 //compare possible payoffs
-                float maxPlayer2 = -999999999999999999;
+                float maxPlayer2 = int.MinValue;
                 for (int columns = 0; columns < matrix.GetCols(); columns++)
                 {
                     if (matrix.GetOnePlayer2Payoff(row, columns) > maxPlayer2)
@@ -891,10 +915,7 @@ namespace Stochastic_Game_Theory_Calculator
             Canvas.Invalidate();
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
 
         private void CancelSelectedCell_Click(object sender, EventArgs e)
         {
@@ -904,6 +925,84 @@ namespace Stochastic_Game_Theory_Calculator
         private void label3_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void DeleteComponent_Click(object sender, EventArgs e)
+        {
+            if (!stopBRESelection() && !stopConnectionSelection())
+            {
+                GetPayoffToDelete();
+               
+            }
+        }
+
+        private void ComponentDeletion(Models.Matrix originMatrix, int row, int col, Models.Matrix destinationMatrix)
+        {
+            for (int i = existingConnections.Count - 1; i >= 0; i--)
+            {
+                currentConnection = existingConnections[i];
+
+                currentConnection.RemoveConnection(originMatrix, row, col, destinationMatrix);
+
+                if (currentConnection.GetConnectedComponents().Count == 0)
+                {
+                    existingConnections.RemoveAt(i);
+                }
+            }
+
+                originNode = null;
+                destinationMatrix = null;
+                MessageBox.Show("Component deleted.");
+                Canvas.Invalidate();
+        }
+
+        private void GetPayoffToDelete()
+        {
+            chossingPayoffToDeleteConnection = true;
+            MessageBox.Show("Please select the payoff of the connection you want to delete.");
+        }
+
+        private void DeleteEntireConnection_Click(object sender, EventArgs e)
+        {
+            if (!stopBRESelection() && !stopConnectionSelection())
+            {
+                DialogResult responce = MessageBox.Show("You are deleting the entire connection. Please confirm.", "Confirm Deletion", MessageBoxButtons.YesNo);
+                if (responce == DialogResult.Yes)
+                {
+                    choosingMatrixToDeleteEntireConnection = true;
+                    MessageBox.Show("Please choose any matrix from the connection you want to delete.");
+                }
+            }
+        }
+
+        private void DeleteAllNodes(Models.Matrix matrix)
+        {
+            for (int i = existingConnections.Count - 1; i >= 0; i--)
+            {
+                if (FindConnectionContainingMatrix(existingConnections[i], matrix))
+                {
+                    existingConnections.RemoveAt(i);
+                }
+            }
+
+            MessageBox.Show("Connection deleted.");
+            
+            Canvas.Invalidate();
+        }
+
+        private bool FindConnectionContainingMatrix(Models.Connection connection, Models.Matrix matrix)
+        {
+            foreach (LinkedList<Node> link in connection.GetConnectedComponents())
+            {
+                foreach (Node node in link)
+                {
+                    if (node.GetModelReference() == matrix)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
