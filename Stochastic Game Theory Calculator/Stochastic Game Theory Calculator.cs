@@ -63,7 +63,6 @@ namespace Stochastic_Game_Theory_Calculator
         private bool choosingMatrixToDeleteEntireConnection = false;
         private bool solvingConnection = false;
         private bool selectingMatrixToSolveConnection = false;
-        private bool pathContinued = false;
 
         public mainWindow()
         {
@@ -336,7 +335,7 @@ namespace Stochastic_Game_Theory_Calculator
                             else if (selectingMatrixToSolveConnection)
                             {
                                 selectingMatrixToSolveConnection = false;
-                                ChoosingMatrixBool.BackColor = Color.White;
+                                ConnectionInitialiseIndicator.BackColor = Color.White;
                                 TraverseConnectionToNash(matrix);
                             }
                             else
@@ -1054,7 +1053,7 @@ namespace Stochastic_Game_Theory_Calculator
         //similarly to BRE this algorithm will use a queue to traverse the matricies
         private void TraverseConnectionToNash(Models.Matrix matrix)
         {
-            MessageBox.Show("The connection which starts at matrix {0} will now be solved via the Best Responce Enumeration", matrix.GetName());
+            MessageBox.Show("The connection which starts at matrix '" + matrix.GetName() + "' will now be solved via the Best Responce Enumeration", matrix.GetName());
             solvingConnection = true;
 
             Queue<Models.Matrix> matrixQueue = new Queue<Models.Matrix>();
@@ -1067,6 +1066,8 @@ namespace Stochastic_Game_Theory_Calculator
             while (matrixQueue.Count > 0)
             {
                 currentMatrix = matrixQueue.Dequeue();
+
+                bool pathContinued = false;
 
                 //check for a cycle
                 if (visitedMatricies.Contains(currentMatrix))
@@ -1117,11 +1118,21 @@ namespace Stochastic_Game_Theory_Calculator
                 //avoid duplicates of solutions
                 finalMatricies = finalMatricies.Distinct().ToList();
 
-                //return all final solutions
+                string combinedOutput = null;
+
+                //combine all outcomes and present in one window
                 foreach (Models.Matrix finalMatrix in finalMatricies)
                 {
-                    ReturnBREResults(finalMatrix);
+                    if (finalMatrix.GetNashEqualibria().Count > 0)
+                    {
+                        combinedOutput += "Pure Strategy Nash Equilibria in '" + finalMatrix.GetName() + "':\n";
+                        foreach (string outcome in finalMatrix.GetNashEqualibria())
+                        {
+                            combinedOutput += outcome + "\n" + "\n----------------------------------------\n\n";
+                        }
+                    }
                 }
+                MessageBox.Show(combinedOutput);
             }
         }
 

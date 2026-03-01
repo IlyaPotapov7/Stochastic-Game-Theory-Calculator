@@ -26,6 +26,7 @@
             this.MatrixInitialise = new System.Windows.Forms.Button();
             this.tutorialButton = new System.Windows.Forms.Button();
             this.ModelSelectionPannel = new System.Windows.Forms.Panel();
+            this.SolveConnection = new System.Windows.Forms.Button();
             this.DeleteEntireConnection = new System.Windows.Forms.Button();
             this.DeleteComponent = new System.Windows.Forms.Button();
             this.CancelSelectedCell = new System.Windows.Forms.Button();
@@ -46,7 +47,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.SolveConnection = new System.Windows.Forms.Button();
             this.ModelSelectionPannel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.panel1.SuspendLayout();
@@ -56,7 +56,7 @@
             // 
             this.ModelSelection.AutoSize = true;
             this.ModelSelection.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ModelSelection.Location = new System.Drawing.Point(40, 107);
+            this.ModelSelection.Location = new System.Drawing.Point(99, 104);
             this.ModelSelection.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ModelSelection.Name = "ModelSelection";
             this.ModelSelection.Size = new System.Drawing.Size(135, 22);
@@ -113,6 +113,19 @@
             this.ModelSelectionPannel.Size = new System.Drawing.Size(345, 1037);
             this.ModelSelectionPannel.TabIndex = 5;
             // 
+            // SolveConnection
+            // 
+            this.SolveConnection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.SolveConnection.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.SolveConnection.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SolveConnection.Location = new System.Drawing.Point(67, 931);
+            this.SolveConnection.Name = "SolveConnection";
+            this.SolveConnection.Size = new System.Drawing.Size(208, 55);
+            this.SolveConnection.TabIndex = 26;
+            this.SolveConnection.Text = "Solve Connection";
+            this.SolveConnection.UseVisualStyleBackColor = false;
+            this.SolveConnection.Click += new System.EventHandler(this.SolveConnection_Click);
+            // 
             // DeleteEntireConnection
             // 
             this.DeleteEntireConnection.BackColor = System.Drawing.SystemColors.ButtonFace;
@@ -165,7 +178,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 10.875F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(89, 304);
+            this.label2.Location = new System.Drawing.Point(128, 310);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(78, 18);
             this.label2.TabIndex = 18;
@@ -205,7 +218,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 10.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(48, 595);
+            this.label1.Location = new System.Drawing.Point(100, 598);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(145, 17);
             this.label1.TabIndex = 13;
@@ -216,7 +229,7 @@
             this.solveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.solveButton.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.solveButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.solveButton.Location = new System.Drawing.Point(75, 887);
+            this.solveButton.Location = new System.Drawing.Point(77, 870);
             this.solveButton.Name = "solveButton";
             this.solveButton.Size = new System.Drawing.Size(194, 55);
             this.solveButton.TabIndex = 12;
@@ -348,19 +361,6 @@
             this.label4.Size = new System.Drawing.Size(76, 14);
             this.label4.TabIndex = 8;
             this.label4.Text = "Choose Matrix";
-            // 
-            // SolveConnection
-            // 
-            this.SolveConnection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SolveConnection.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.SolveConnection.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.SolveConnection.Location = new System.Drawing.Point(67, 948);
-            this.SolveConnection.Name = "SolveConnection";
-            this.SolveConnection.Size = new System.Drawing.Size(208, 55);
-            this.SolveConnection.TabIndex = 26;
-            this.SolveConnection.Text = "Solve Connection";
-            this.SolveConnection.UseVisualStyleBackColor = false;
-            this.SolveConnection.Click += new System.EventHandler(this.SolveConnection_Click);
             // 
             // mainWindow
             // 
