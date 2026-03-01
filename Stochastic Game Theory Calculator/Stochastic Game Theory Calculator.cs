@@ -11,6 +11,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace Stochastic_Game_Theory_Calculator
 {
@@ -60,6 +61,9 @@ namespace Stochastic_Game_Theory_Calculator
         private bool chossingPayoffToDeleteConnection = false;
         private bool chossingMatrixToDeleteConnection = false;
         private bool choosingMatrixToDeleteEntireConnection = false;
+        private bool solvingConnection = false;
+        private bool selectingMatrixToSolveConnection = false;
+        private bool pathContinued = false;
 
         public mainWindow()
         {
@@ -296,11 +300,7 @@ namespace Stochastic_Game_Theory_Calculator
                         if (e.Button == MouseButtons.Right && matrix.GetHitbox().Contains(worldMouseCoord))
                         {
 
-                            if (!matrixSelection && !connectionSelection && !chossingPayoffToDeleteConnection && !chossingMatrixToDeleteConnection && !choosingMatrixToDeleteEntireConnection)
-                            {
-                                editMatrix(matrix);
-                            }
-                            else if(connectionSelection)
+                            if(connectionSelection)
                             {
                                 ConnectionModelSelection(matrix);
                             }
@@ -333,7 +333,17 @@ namespace Stochastic_Game_Theory_Calculator
                                 choosingMatrixToDeleteEntireConnection = false;
                                 DeleteAllNodes(matrix);
                             }
-                                break;
+                            else if (selectingMatrixToSolveConnection)
+                            {
+                                selectingMatrixToSolveConnection = false;
+                                ChoosingMatrixBool.BackColor = Color.White;
+                                TraverseConnectionToNash(matrix);
+                            }
+                            else
+                            {
+                                editMatrix(matrix);
+                            }
+                            break;
 
                         }
                         else if (matrix.GetHitbox().Contains(worldMouseCoord))
@@ -706,8 +716,11 @@ namespace Stochastic_Game_Theory_Calculator
 
         public void BestResponceEnumeration(Models.Matrix matrix)
         {
-     
-            MessageBox.Show(matrix.GetName() + " will now be solved via the Best Responce Enumeration Algorithm");
+            if (!solvingConnection)
+            {
+                MessageBox.Show(matrix.GetName() + " will now be solved via the Best Responce Enumeration Algorithm");
+            }
+            
 
             //prepare data for comparison, i need some way of marking cells in rows and columns as best responces in order to compare them later to find the intersection and also do maths with them
             CreateDataStrucutresForBRE(matrix);
@@ -724,13 +737,14 @@ namespace Stochastic_Game_Theory_Calculator
             //fix a row
             ColPlayerBRE(matrix);
 
-            // Find intersections of best responces (Nash Equalibrium Cells)
 
             FindIntersectionsOfBRE(matrix);
 
             //return results
-
-            ReturnBREResults(matrix);
+            if (!solvingConnection)
+            {
+                ReturnBREResults(matrix);
+            }
         }
 
         private void CreateDataStrucutresForBRE(Models.Matrix matrix)
@@ -747,7 +761,7 @@ namespace Stochastic_Game_Theory_Calculator
             for (int col = 0; col < matrix.GetCols(); col++)
             {
                 //finds the payoff for player 1 for a currently fixed column
-                float maxPlayer1 = -999999999999999999; //assume the current payoff for player1 is as bad as bossible as so in the first comparsion the first payoff will always be better not matter how bad it is
+                float maxPlayer1 = float.MinValue; //assume the current payoff for player1 is as bad as bossible as so in the first comparsion the first payoff will always be better not matter how bad it is
                 for (int row = 0; row < matrix.GetRows(); row++)
                 {
                     if(row == 0)
@@ -841,6 +855,7 @@ namespace Stochastic_Game_Theory_Calculator
         }
 
 
+
         //now i will add methods for easier canvas navigation 
 
         // origin is the red dot in the top left corner next to which matricies appear when they are initialised
@@ -854,11 +869,11 @@ namespace Stochastic_Game_Theory_Calculator
         //make all matricies appear close to origin so no matricies are lost
         private void lockalise_matricies_Click(object sender, EventArgs e)
         {
-            foreach(Models.Matrix m in savedMaticies)
+            foreach(Models.Matrix matrix in savedMaticies)
             {
-                m.SetX(150);
-                m.SetY(80);
-                localise_matrix(m); 
+                matrix.SetX(150);
+                matrix.SetY(80);
+                localise_matrix(matrix); 
             }
             Canvas.Invalidate();
         }
@@ -940,20 +955,24 @@ namespace Stochastic_Game_Theory_Calculator
         {
             for (int i = existingConnections.Count - 1; i >= 0; i--)
             {
-                currentConnection = existingConnections[i];
-
-                currentConnection.RemoveConnection(originMatrix, row, col, destinationMatrix);
-
-                if (currentConnection.GetConnectedComponents().Count == 0)
+                if (existingConnections[i] != null)
                 {
-                    existingConnections.RemoveAt(i);
+                    Connection connection = existingConnections[i];
+
+
+                    connection.RemoveConnection(originMatrix, row, col, destinationMatrix);
+
+                    if (connection.GetConnectedComponents().Count == 0)
+                    {
+                        existingConnections.RemoveAt(i);
+                    }
                 }
             }
 
-                originNode = null;
-                destinationMatrix = null;
-                MessageBox.Show("Component deleted.");
-                Canvas.Invalidate();
+            originNode = null;
+            destinationMatrix = null;
+            MessageBox.Show("Component deletion processed.");
+            Canvas.Invalidate();
         }
 
         private void GetPayoffToDelete()
@@ -966,27 +985,42 @@ namespace Stochastic_Game_Theory_Calculator
         {
             if (!stopBRESelection() && !stopConnectionSelection())
             {
-                DialogResult responce = MessageBox.Show("You are deleting the entire connection. Please confirm.", "Confirm Deletion", MessageBoxButtons.YesNo);
-                if (responce == DialogResult.Yes)
-                {
+                
                     choosingMatrixToDeleteEntireConnection = true;
                     MessageBox.Show("Please choose any matrix from the connection you want to delete.");
-                }
             }
         }
 
         private void DeleteAllNodes(Models.Matrix matrix)
         {
+            bool connectionDeleted = false;
+
             for (int i = existingConnections.Count - 1; i >= 0; i--)
             {
                 if (FindConnectionContainingMatrix(existingConnections[i], matrix))
                 {
                     existingConnections.RemoveAt(i);
+                    connectionDeleted = true;
                 }
             }
 
-            MessageBox.Show("Connection deleted.");
-            
+            if (currentConnection != null && FindConnectionContainingMatrix(currentConnection, matrix))
+            {
+                currentConnection = null;
+                connectionSelection = false;
+                ConnectionInitialiseIndicator.BackColor = Color.White;
+                connectionDeleted = true;
+            }
+
+            if (connectionDeleted)
+            {
+                MessageBox.Show("Connection deleted");
+            }
+            else
+            {
+                MessageBox.Show("Deletion unsuccesfull");
+            }
+
             Canvas.Invalidate();
         }
 
@@ -1003,6 +1037,124 @@ namespace Stochastic_Game_Theory_Calculator
                 }
             }
             return false;
+        }
+        private void SolveConnection_Click(object sender, EventArgs e)
+        {
+            if (existingConnections.Count == 0)
+            {
+                MessageBox.Show("Please create at least one connection to solve");
+                return;
+            }
+
+            MessageBox.Show("Please select the origin model of the connection to solve.");
+            selectingMatrixToSolveConnection = true;
+            ConnectionInitialiseIndicator.BackColor = Color.Orange;
+        }
+
+        //similarly to BRE this algorithm will use a queue to traverse the matricies
+        private void TraverseConnectionToNash(Models.Matrix matrix)
+        {
+            MessageBox.Show("The connection which starts at matrix {0} will now be solved via the Best Responce Enumeration", matrix.GetName());
+            solvingConnection = true;
+
+            Queue<Models.Matrix> matrixQueue = new Queue<Models.Matrix>();
+            matrixQueue.Enqueue(matrix);
+            
+            List<Models.Matrix> visitedMatricies = new List<Models.Matrix>();//track visited matricies to prevent cycles
+
+            List<Models.Matrix> finalMatricies = new List<Models.Matrix>();
+
+            while (matrixQueue.Count > 0)
+            {
+                currentMatrix = matrixQueue.Dequeue();
+
+                //check for a cycle
+                if (visitedMatricies.Contains(currentMatrix))
+                {
+                    MessageBox.Show($"Cycle at [{currentMatrix.GetName()}]. Infinite loop prevented. Please correct and run the program again.");
+                    continue;
+                }
+                visitedMatricies.Add(currentMatrix);
+
+                //clear global variable before solving a matrix
+                currentMatrix.GetNashEqualibria().Clear();
+                BestResponceEnumeration(currentMatrix);
+
+                List<Point> NashEqualibriaCells = GetNashEquilibriaCells(currentMatrix);
+
+                //avoid matrticies with no equalibrium
+                if (NashEqualibriaCells.Count == 0)
+                {
+                    MessageBox.Show($"Traversal terminated for one of the branches: no Pure Strategy Nash Equilibrium exists in [{currentMatrix.GetName()}] matrix.");
+                    finalMatricies.Add(currentMatrix);
+                    continue;
+                }
+
+                foreach (Point cell in NashEqualibriaCells)
+                {
+                    Models.Matrix nextMatrix = GetNextConnectedMatrix(currentMatrix, cell.X, cell.Y);
+
+                    //enqueue all existing connections
+                    if (nextMatrix != null)
+                    {
+                        matrixQueue.Enqueue(nextMatrix);
+                        pathContinued = true;
+                    }
+                }
+
+                //check if the matrix is final
+                if (!pathContinued)
+                {
+                    finalMatricies.Add(currentMatrix);
+                }
+            }
+
+            solvingConnection = false;
+
+            //output the nash equalibria
+            if (finalMatricies.Count > 0)
+            {
+                //avoid duplicates of solutions
+                finalMatricies = finalMatricies.Distinct().ToList();
+
+                //return all final solutions
+                foreach (Models.Matrix finalMatrix in finalMatricies)
+                {
+                    ReturnBREResults(finalMatrix);
+                }
+            }
+        }
+
+        private List<Point> GetNashEquilibriaCells(Models.Matrix matrix)
+        {
+            List<Point> nashEquilibria = new List<Point>();
+
+            for (int row = 0; row < matrix.GetRows(); row++)
+            {
+                for (int col = 0; col < matrix.GetCols(); col++)
+                {
+                    if (matrix.GetOnePlayer1BestResponse(row, col) && matrix.GetOnePlayer2BestResponse(row, col))
+                    {
+                        nashEquilibria.Add(new Point(row, col));
+                    }
+                }
+            }
+            return nashEquilibria;
+        }
+
+        private Models.Matrix GetNextConnectedMatrix(Models.Matrix originMatrix, int row, int col)
+        {
+            foreach (Connection connection in existingConnections)
+            {
+                LinkedList<Node> link = connection.GetLinkOfCell(originMatrix, row, col);
+
+                if (link != null && link.First != null && link.First.Next != null)
+                {
+                    return (Models.Matrix)link.First.Next.Value.GetModelReference();
+                }
+            }
+
+            return null;
         }
     }
 }
