@@ -152,6 +152,14 @@ namespace Stochastic_Game_Theory_Calculator
                 if (MM.deleted)
                 {
                     savedMaticies.Remove(currentMatrix);
+
+                    for (int i = existingConnections.Count - 1 ; i >= 0; i--)
+                    {
+                        if (FindConnectionContainingMatrix(existingConnections[i], currentMatrix))
+                        {
+                            existingConnections.RemoveAt(i);
+                        }
+                    }
                 }
                 else if (MM.isSaved)
                 {
@@ -178,7 +186,7 @@ namespace Stochastic_Game_Theory_Calculator
         private void tutorialButton_Click(object sender, EventArgs e)
         {
             
-                System.Diagnostics.Process.Start("https://www.youtube.com/watch?v=rA57mAI6cKc");
+            System.Diagnostics.Process.Start("https://www.youtube.com/watch?v=rA57mAI6cKc");
             
         }
 
@@ -382,15 +390,15 @@ namespace Stochastic_Game_Theory_Calculator
 
                         if (cellIndex[0] != -1)
                         {
+                            if(CellConnected(model, cellIndex[0], cellIndex[1]))
+                            { 
+                                return;
+                            }
                             currentConnection.SetRootModel(model);
                             model.SetConnectionRowIndeex(cellIndex[0]);
                             model.SetConnectionColIndeex(cellIndex[1]);
 
                             MessageBox.Show($"Connection origin: payoff [{model.GetOnePayoff(cellIndex[0],cellIndex[1])}] in the model [{model.GetName()}]. Please select the destination model.");
-                        }
-                        else
-                        {
-                            MessageBox.Show("Please select a payoff");
                         }
                     }
                     else
@@ -436,7 +444,26 @@ namespace Stochastic_Game_Theory_Calculator
                 DrawConnection(e.Graphics, currentConnection);
             }
         }
-       
+        private bool CellConnected(Models.Matrix matrix, int row, int col)
+        {
+            foreach (Connection connection in existingConnections)
+            {
+                if (connection.GetLinkOfCell(matrix, row, col) != null)
+                {
+                    MessageBox.Show("One cell can not have more than one connection", "Cell Selection");
+                    return true;
+                }   
+            }
+
+            if (currentConnection != null && currentConnection.GetLinkOfCell(matrix, row, col) != null)
+            {
+                MessageBox.Show("One cell can not have more than one connection.", "Cell Selection");
+                return true;
+            }
+
+            return false;
+        }
+
         //this method will contain all drawing logic for the canvas
         private void DrawMatrix(Graphics g, Models.Matrix matrix)
         {
