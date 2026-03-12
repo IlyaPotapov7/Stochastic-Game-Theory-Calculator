@@ -8,7 +8,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stochastic_Game_Theory_Calculator.Models
+namespace Game_Theory_Calculator.Models
 {
     public class Matrix : Model
     {
@@ -46,7 +46,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
         private List<string> NashEqualibria = new List<string>();
 
 
-        public Matrix(int Rows, int Cols, string[,] Payoffs, string[] RowStrategies, string[] ColStrategies, string Name, Stack<Matrix> VersionsStack, string[] Players,float X, float Y, RectangleF Hitbox)
+        public Matrix(int Rows, int Cols, string[,] Payoffs, string[] RowStrategies, string[] ColStrategies, string Name, Stack<Matrix> VersionsStack, string[] Players, float X, float Y, RectangleF Hitbox)
         {
             rows = Rows;
             cols = Cols;
@@ -102,7 +102,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public string GetOnePayoff(int row, int col)
         {
-            return payoffs[row, col]; 
+            return payoffs[row, col];
         }
 
         public void SetPayoffs(string[,] newPayoff)
@@ -165,15 +165,15 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public void PushVersionStack(Matrix pushedMatrix)
         {
-            versionsStack.Push(pushedMatrix); 
+            versionsStack.Push(pushedMatrix);
         }
 
         public Matrix PopVersionStack()
         {
-            return versionsStack.Pop(); 
+            return versionsStack.Pop();
         }
 
-        public float GetX() 
+        public float GetX()
         {
             return masterX;
         }
@@ -219,7 +219,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public void SetIsMoving(bool Moving)
         {
-            moving = Moving; 
+            moving = Moving;
         }
 
         public float GetCellHeight()
@@ -229,7 +229,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public void SetCellHeight(float cellHeight)
         {
-            this.cellHeight = cellHeight; 
+            this.cellHeight = cellHeight;
         }
 
         public float GetCellWidth()
@@ -374,7 +374,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public bool GetOnePlayer2BestResponse(int row, int col)
         {
-            return Player2BestResponses[row,col];
+            return Player2BestResponses[row, col];
         }
 
         public void SetPlayer2BestResponses(bool[,] Player2BestResponses)
@@ -393,7 +393,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public float GetOnePlayer1Payoff(int row, int col)
         {
-            return Player1Payoffs[row,col];
+            return Player1Payoffs[row, col];
         }
 
         public float GetOnePlayer2Payoff(int row, int col)
@@ -433,7 +433,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public int GetconnectionRowIndeex()
         {
-            return connectionOutcomeRowIndeex; 
+            return connectionOutcomeRowIndeex;
         }
 
         public void SetConnectionRowIndeex(int index)
@@ -535,13 +535,13 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
             foreach (Models.Matrix matrix in savedMatricies)
             {
-                if(savedMatricies.Count == 0)
+                if (savedMatricies.Count == 0)
                 {
                     break;
                 }
-                else if(matrix.GetName()== "Default Name")
+                else if (matrix.GetName() == "Default Name")
                 {
-                    defaultName = "Default Name (" + count +")";
+                    defaultName = "Default Name (" + count + ")";
                     break;
                 }
                 else

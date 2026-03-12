@@ -1,4 +1,4 @@
-﻿namespace Stochastic_Game_Theory_Calculator
+﻿namespace Game_Theory_Calculator
 {
     partial class MatrixModification
     {

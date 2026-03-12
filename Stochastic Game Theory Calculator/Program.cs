@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Stochastic_Game_Theory_Calculator
+namespace Game_Theory_Calculator
 {
     internal static class Program
     {

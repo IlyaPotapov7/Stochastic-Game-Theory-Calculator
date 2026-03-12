@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Stochastic_Game_Theory_Calculator.Models
+namespace Game_Theory_Calculator.Models
 {
     public class Connection
     {
@@ -21,12 +21,12 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public int GetConnectionID()
         {
-            return connectionID; 
+            return connectionID;
         }
 
         public List<LinkedList<Node>> GetConnectedComponents()
         {
-            return connectedComponents; 
+            return connectedComponents;
         }
 
         public void AddConection(Model originModel, Model destinationModel, int originRow, int originCol)
@@ -48,7 +48,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
                 }
             }
         }
-        
+
         public LinkedList<Node> GetLinkOfCell(Model originModel, int originRow, int originCol)
         {
             foreach (var nodesList in connectedComponents)
@@ -155,7 +155,7 @@ namespace Stochastic_Game_Theory_Calculator.Models
 
         public int GetRowIndex()
         {
-            return RowIndex; 
+            return RowIndex;
         }
 
         public void SetRowIndex(int rowIndex)

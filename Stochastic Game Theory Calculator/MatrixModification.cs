@@ -1,4 +1,4 @@
-﻿using Stochastic_Game_Theory_Calculator.Models;
+﻿using Game_Theory_Calculator.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace Stochastic_Game_Theory_Calculator
+namespace Game_Theory_Calculator
 {
     public partial class MatrixModification : Form
     {
@@ -45,7 +45,7 @@ namespace Stochastic_Game_Theory_Calculator
                 {
                     continue;
                 }
-                MatrixBlueprint[0, r].ReadOnly = true; 
+                MatrixBlueprint[0, r].ReadOnly = true;
             }
             for (int c = 1; c < MatrixBlueprint.ColumnCount; c++)
             {
@@ -62,7 +62,7 @@ namespace Stochastic_Game_Theory_Calculator
         {
             splitPayoff = null;
 
-            for(int r = 0; r < currentMatrix.GetRows(); r++)
+            for (int r = 0; r < currentMatrix.GetRows(); r++)
             {
                 for (int x = 0; x < currentMatrix.GetCols(); x++)
                 {
@@ -70,13 +70,13 @@ namespace Stochastic_Game_Theory_Calculator
 
                     if (cellValue == null || string.IsNullOrWhiteSpace(cellValue.ToString()))
                     {
-                        MessageBox.Show($"Cell {x+3},{r+3} is empty. Please fill in the payoff");
+                        MessageBox.Show($"Cell {x + 3},{r + 3} is empty. Please fill in the payoff");
                         return false;
                     }
                     splitPayoff = cellValue.ToString().Split(':');
                     if (splitPayoff.Length != 2 || !float.TryParse(splitPayoff[0], out _) || !float.TryParse(splitPayoff[1], out _))
                     {
-                        MessageBox.Show($"The value '{(MatrixBlueprint[x+2,r+2]).Value}' is invalid, the payoff must be in the form 'number:number'");
+                        MessageBox.Show($"The value '{(MatrixBlueprint[x + 2, r + 2]).Value}' is invalid, the payoff must be in the form 'number:number'");
                         return false;
                     }
                 }
@@ -101,7 +101,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void SaveChanges_Click(object sender, EventArgs e)
         {
-            if(VerifyPayofsFloat())
+            if (VerifyPayofsFloat())
             {
                 currentMatrix.PushVersionStack(copyMatrix(currentMatrix));
                 SaveBeforeEdit();
@@ -121,7 +121,7 @@ namespace Stochastic_Game_Theory_Calculator
             }
             for (int c = 0; c < currentMatrix.GetCols(); c++)
             {
-                currentMatrix.SetOneColStrategy(c,MatrixBlueprint[c + 2, 1].Value.ToString());
+                currentMatrix.SetOneColStrategy(c, MatrixBlueprint[c + 2, 1].Value.ToString());
             }
 
             for (int r = 0; r < currentMatrix.GetRows(); r++)
@@ -129,9 +129,9 @@ namespace Stochastic_Game_Theory_Calculator
                 currentMatrix.SetOneRowStrategy(r, MatrixBlueprint[1, r + 2].Value.ToString());
             }
 
-            currentMatrix.SetOnePlayer(0,MatrixBlueprint[0, 2].Value.ToString());
-            currentMatrix.SetOnePlayer(1,MatrixBlueprint[2, 0].Value.ToString());
-            currentMatrix.SetName(MatrixBlueprint[0,0].Value.ToString());
+            currentMatrix.SetOnePlayer(0, MatrixBlueprint[0, 2].Value.ToString());
+            currentMatrix.SetOnePlayer(1, MatrixBlueprint[2, 0].Value.ToString());
+            currentMatrix.SetName(MatrixBlueprint[0, 0].Value.ToString());
         }
 
         public void DisplayMatrix(Models.Matrix matrix)
@@ -214,7 +214,7 @@ namespace Stochastic_Game_Theory_Calculator
             string[,] temporaryPayoffs = new string[currentMatrix.GetRows(), currentMatrix.GetCols()];
             string[] temporaryRowStrategies = new string[currentMatrix.GetRows()];
 
-            for (int r = 0; r < currentMatrix.GetRows()-1; r++)
+            for (int r = 0; r < currentMatrix.GetRows() - 1; r++)
             {
                 temporaryRowStrategies[r] = currentMatrix.GetOneRowStrategy(r);
             }
@@ -324,7 +324,7 @@ namespace Stochastic_Game_Theory_Calculator
         private Models.Matrix copyMatrix(Models.Matrix originalMatrix)
         {
             Models.Matrix updatedMatrix = new Models.Matrix();
-            
+
             updatedMatrix.SetCols(originalMatrix.GetCols());
             updatedMatrix.SetRows(originalMatrix.GetRows());
 
@@ -348,7 +348,7 @@ namespace Stochastic_Game_Theory_Calculator
 
         private void DeleteMatrixButton_Click(object sender, EventArgs e)
         {
-            DialogResult check_beofre_delete = MessageBox.Show("Are you sure you want to delete currently selected matrix?", "Deleting Matrix",MessageBoxButtons.YesNo);
+            DialogResult check_beofre_delete = MessageBox.Show("Are you sure you want to delete currently selected matrix?", "Deleting Matrix", MessageBoxButtons.YesNo);
             if (check_beofre_delete == DialogResult.Yes)
             {
                 deleted = true;
@@ -370,5 +370,5 @@ namespace Stochastic_Game_Theory_Calculator
             DisplayMatrix(currentMatrix);
         }
 
-    }   
+    }
 }

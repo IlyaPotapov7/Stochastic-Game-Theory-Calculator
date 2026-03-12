@@ -58,20 +58,14 @@
     <Compile Include="Components\Connection.cs" />
     <Compile Include="Components\Model.cs" />
     <Compile Include="Components\Matrix.cs" />
-    <Compile Include="Stochastic Game Theory Calculator.cs">
+    <Compile Include="Game Theory Calculator.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Stochastic Game Theory Calculator.Designer.cs">
-      <DependentUpon>Stochastic Game Theory Calculator.cs</DependentUpon>
+    <Compile Include="Game Theory Calculator.Designer.cs">
+      <DependentUpon>Game Theory Calculator.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StochasticModification.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StochasticModification.Designer.cs">
-      <DependentUpon>StochasticModification.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="MatrixModification.resx">
       <DependentUpon>MatrixModification.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,11 +78,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Stochastic Game Theory Calculator.resx">
-      <DependentUpon>Stochastic Game Theory Calculator.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StochasticModification.resx">
-      <DependentUpon>StochasticModification.cs</DependentUpon>
+    <EmbeddedResource Include="Game Theory Calculator.resx">
+      <DependentUpon>Game Theory Calculator.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">

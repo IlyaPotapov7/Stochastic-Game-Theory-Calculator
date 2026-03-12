@@ -1,4 +1,4 @@
-﻿namespace Stochastic_Game_Theory_Calculator
+﻿namespace Game_Theory_Calculator
 {
     partial class mainWindow
     {
@@ -377,7 +377,7 @@
             this.Name = "mainWindow";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Stochastic Game Theory Calculator";
+            this.Text = "Game Theory Calculator";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ModelSelectionPannel.ResumeLayout(false);
             this.ModelSelectionPannel.PerformLayout();
