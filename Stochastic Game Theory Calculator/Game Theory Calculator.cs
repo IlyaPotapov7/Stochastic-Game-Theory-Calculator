@@ -17,7 +17,7 @@ namespace Game_Theory_Calculator
 {
     public partial class mainWindow : Form
     {
-        // Here I will initialise variables for all subroutines to make them easier to organise and find
+        // Here I will initialise variables for all subroutines to make them easier to organise
 
         private Models.Matrix currentMatrix;
         public List<Models.Matrix> savedMaticies;
