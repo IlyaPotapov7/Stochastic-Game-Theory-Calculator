@@ -63,7 +63,6 @@
             this.MatrixBlueprint.RowTemplate.Height = 33;
             this.MatrixBlueprint.Size = new System.Drawing.Size(1169, 619);
             this.MatrixBlueprint.TabIndex = 0;
-            this.MatrixBlueprint.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // Column1
             // 

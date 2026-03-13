@@ -160,7 +160,6 @@
             this.CancelSelectedCell.TabIndex = 24;
             this.CancelSelectedCell.Text = "Unselect";
             this.CancelSelectedCell.UseVisualStyleBackColor = false;
-            this.CancelSelectedCell.Click += new System.EventHandler(this.CancelSelectedCell_Click);
             // 
             // saveConnection
             // 
@@ -317,7 +316,6 @@
             this.ConnectionInitialiseIndicator.Size = new System.Drawing.Size(25, 24);
             this.ConnectionInitialiseIndicator.TabIndex = 12;
             this.ConnectionInitialiseIndicator.Text = "   ";
-            this.ConnectionInitialiseIndicator.Click += new System.EventHandler(this.ConnectionInitialiseIndicator_Click);
             // 
             // ChoosingMatrixBool
             // 
@@ -329,7 +327,6 @@
             this.ChoosingMatrixBool.Size = new System.Drawing.Size(25, 24);
             this.ChoosingMatrixBool.TabIndex = 11;
             this.ChoosingMatrixBool.Text = "   ";
-            this.ChoosingMatrixBool.Click += new System.EventHandler(this.ChoosingMatrixBool_Click);
             // 
             // label5
             // 
@@ -350,7 +347,6 @@
             this.label3.Size = new System.Drawing.Size(194, 24);
             this.label3.TabIndex = 9;
             this.label3.Text = "Connection Selection";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
             // 

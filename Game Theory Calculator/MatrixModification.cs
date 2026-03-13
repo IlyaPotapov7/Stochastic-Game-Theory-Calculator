@@ -1,5 +1,4 @@
-﻿using Game_Theory_Calculator.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,12 +17,12 @@ namespace Game_Theory_Calculator
 {
     public partial class MatrixModification : Form
     {
-        public Models.Matrix currentMatrix = new Models.Matrix();
+        public mainWindow.Matrix currentMatrix = new mainWindow.Matrix();
         public bool isSaved = false;
         public bool deleted = false;
         private string[] splitPayoff;
 
-        public void recieveMatrix(Models.Matrix matrix)
+        public void recieveMatrix(mainWindow.Matrix matrix)
         {
             currentMatrix = copyMatrix(matrix);
         }
@@ -31,11 +30,6 @@ namespace Game_Theory_Calculator
         public MatrixModification()
         {
             InitializeComponent();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
         private void AccesabilityLimit()
         {
@@ -55,7 +49,6 @@ namespace Game_Theory_Calculator
                 }
                 MatrixBlueprint[c, 0].ReadOnly = true;
             }
-
         }
 
         public bool VerifyPayofsFloat()
@@ -134,7 +127,7 @@ namespace Game_Theory_Calculator
             currentMatrix.SetName(MatrixBlueprint[0, 0].Value.ToString());
         }
 
-        public void DisplayMatrix(Models.Matrix matrix)
+        public void DisplayMatrix(mainWindow.Matrix matrix)
         {
             currentMatrix = matrix;
 
@@ -321,9 +314,9 @@ namespace Game_Theory_Calculator
             DisplayMatrix(currentMatrix);
         }
 
-        private Models.Matrix copyMatrix(Models.Matrix originalMatrix)
+        private mainWindow.Matrix copyMatrix(mainWindow.Matrix originalMatrix)
         {
-            Models.Matrix updatedMatrix = new Models.Matrix();
+            mainWindow.Matrix updatedMatrix = new mainWindow.Matrix();
 
             updatedMatrix.SetCols(originalMatrix.GetCols());
             updatedMatrix.SetRows(originalMatrix.GetRows());
@@ -369,6 +362,5 @@ namespace Game_Theory_Calculator
             }
             DisplayMatrix(currentMatrix);
         }
-
     }
 }
